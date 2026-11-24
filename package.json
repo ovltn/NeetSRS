@@ -1,10 +1,16 @@
 {
   "name": "neetsrs",
-  "description": "A spaced repetition extension for LeetCode problems",
+  "description": "A spaced repetition extension for NeetCode problems, forked from LeetSRS",
   "private": true,
-  "version": "1.7.2",
+  "version": "0.1.0",
   "license": "MIT",
   "author": "Matt Drake",
+  "contributors": [
+    "ovltn"
+  ],
+  "homepage": "https://github.com/ovltn/NeetSRS",
+  "repository": "github:ovltn/NeetSRS",
+  "bugs": "https://github.com/ovltn/NeetSRS/issues",
   "engines": {
     "node": ">=24"
   },

@@ -360,7 +360,7 @@ const zhCN: Translations = {
       rateTitle: '喜欢 NeetSRS 吗？',
       rateBody: '评个分，帮更多人发现它。',
       rateCta: '评分',
-      copyright: '© 2026 Matt Drake',
+      copyright: '© 2026 Matt Drake, NeetSRS contributors',
       github: '在 GitHub 上点 Star',
     },
   },

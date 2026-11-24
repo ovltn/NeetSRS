@@ -385,7 +385,7 @@ const en = {
       rateTitle: 'Enjoying NeetSRS?',
       rateBody: 'A quick rating helps others find it.',
       rateCta: 'Rate',
-      copyright: '© 2026 Matt Drake',
+      copyright: '© 2026 Matt Drake, NeetSRS contributors',
       github: 'Star on GitHub',
     },
   },

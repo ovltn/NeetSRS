@@ -33,3 +33,4 @@ experiments/
 .env*
 !.env.example
 .wrangler/
+web-ext-artifacts

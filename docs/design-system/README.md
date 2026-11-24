@@ -1,9 +1,9 @@
-LeetSRS is a quiet study tool that lives in two places: a 370 × 550 browser popup, and a small panel injected into LeetCode.com. Both read one token set. The UI is neutral zinc greys with one green, and gets out of the way of the problems.
+NeetSRS is a quiet study tool that lives in two places: a 370 × 550 browser popup, and a small panel injected into neetcode.io. Both read one token set. The UI is neutral zinc greys with one green, and gets out of the way of the problems.
 
 ## Surfaces
 
 - **Popup** — `canvas` background, content on `surface` cards with a `line` border, `radius-xl` and `shadow-card`. Text is set in `sans` (Geist).
-- **On LeetCode** — floating panels on `surface` with `radius-xl` and `shadow-float`. Text is set in `system` (system-ui) so the panel fits in with the host page. This is the one intended type difference. Theme follows LeetCode's `dark` / `dark-theme` class, not `prefers-color-scheme`: set `data-theme` on each surface root.
+- **On NeetCode** — floating panels on `surface` with `radius-xl` and `shadow-float`. Text is set in `system` (system-ui) so the panel fits in with the host page. This is the one intended type difference. Theme follows NeetCode's `dark` / `dark-theme` class, not `prefers-color-scheme`: set `data-theme` on each surface root.
 - Both surfaces use the same `light` and `dark` colour values.
 
 ## Content fundamentals
@@ -20,16 +20,16 @@ LeetSRS is a quiet study tool that lives in two places: a 370 × 550 browser pop
 - `fg-3` is for metadata and quiet labels. It holds 4.5:1 on `canvas`, `surface` and `raised`.
 - Status colours: `danger` fills destructive confirms, with `on-danger` text (never literal white: it fails in dark mode). Use `danger-text` for red text, with `danger-soft` behind notices. Use `warning` for icons and dots and `warning-text` for text. `info` is for icons and dots only, on `info-soft` when the icon sits in a tile.
 - Status is never colour alone. Notices always carry an icon (circle-alert, triangle-alert, circle-check, info), and difficulty always carries its word.
-- Domain colours: `difficulty-*` for LeetCode difficulty, `rating-again/hard/good/easy` for the four FSRS grades, `heat-1…4` for calendar load. Don't reuse them for anything else.
-- `host-fill` / `host-fill-hover` are only for the in-page button that sits in LeetCode's toolbar.
+- Domain colours: `difficulty-*` for NeetCode difficulty, `rating-again/hard/good/easy` for the four FSRS grades, `heat-1…4` for calendar load. Don't reuse them for anything else.
+- `host-fill` / `host-fill-hover` are only for the in-page button that sits in NeetCode's toolbar.
 
 ## Type
 
 - Popup scale: `hero` 19, `stat` 17, `view-title` / `sheet-title` 15, `body` 13, `small` 12, `caption` 11. Most controls use `small`, and row titles use `body` at medium weight.
-- On LeetCode: `panel-title` 14, `panel-body` 13, `panel-meta` 12, and `wordmark` in the mono subset.
+- On NeetCode: `panel-title` 14, `panel-body` 13, `panel-meta` 12, and `wordmark` in the mono subset.
 - Weights are 400, 500 and 600 only. Headings get light negative tracking (-0.01em to -0.025em).
 - `mono` (JetBrains Mono) is used only for view titles and the wordmark.
-- In code, each style is a Tailwind size that carries its line height and tracking: `text-hero`, `text-stat`, `text-title`, `text-body`, `text-xs` (small) and `text-caption` in the popup (`popup/App.css`), and `text-panel-title`, `text-panel-body` and `text-panel-meta` on LeetCode (`content/ui/shadow.css`). Never set a pixel size directly.
+- In code, each style is a Tailwind size that carries its line height and tracking: `text-hero`, `text-stat`, `text-title`, `text-body`, `text-xs` (small) and `text-caption` in the popup (`popup/App.css`), and `text-panel-title`, `text-panel-body` and `text-panel-meta` on NeetCode (`content/ui/shadow.css`). Never set a pixel size directly.
 
 ## Spacing, size and shape
 
@@ -50,7 +50,7 @@ LeetSRS is a quiet study tool that lives in two places: a 370 × 550 browser pop
 
 - Use Lucide via `react-icons/lu` for all UI icons: 14px (`size-3.5`) in notices and 16px in buttons, stroked in `currentColor`.
 - Font Awesome's `FaGithub` is the single brand-mark exception.
-- The LeetSRS mark is `LeetSRSLogo` (`shared/ui/LeetSRSLogo.tsx`): a Lucide-style 2px-stroke arc with a return arrow and trailing dots, drawn in `currentColor` at 1em.
+- The NeetSRS mark is `NeetSRSLogo` (`shared/ui/NeetSRSLogo.tsx`): a Lucide-style 2px-stroke arc with a return arrow and trailing dots, drawn in `currentColor` at 1em.
 
 ## Layout
 

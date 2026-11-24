@@ -28,7 +28,22 @@ npm install
 npm run build
 ```
 
-In Chrome, open `chrome://extensions`, turn on **Developer mode**, select **Load unpacked** and choose `.output/chrome-mv3`. For Firefox, run `npm run build:firefox` and load `.output/firefox-mv3` from `about:debugging`.
+In Chrome, open `chrome://extensions`, turn on **Developer mode**, select **Load unpacked** and choose `.output/chrome-mv3`.
+
+In Firefox (140 or newer), run `npm run build:firefox`, open `about:debugging#/runtime/this-firefox`, select **Load Temporary Add-on** and choose `.output/firefox-mv3/manifest.json`. Firefox removes a temporary add-on when it restarts.
+
+### A permanent Firefox install
+
+Release Firefox only keeps add-ons that Mozilla has signed. To sign your own copy without listing it publicly, create API credentials at <https://addons.mozilla.org/developers/addon/api/key/> and run:
+
+```sh
+npm run zip:firefox
+npx web-ext sign --channel unlisted --source-dir .output/firefox-mv3 \
+  --upload-source-code .output/neetsrs-<version>-sources.zip \
+  --api-key "$WEB_EXT_API_KEY" --api-secret "$WEB_EXT_API_SECRET"
+```
+
+Open the signed `.xpi` it writes to `web-ext-artifacts/` in Firefox to install it.
 
 ## Problem data
 
