@@ -7,7 +7,7 @@ const en = {
   topicLabel: (topic: string) => getTopicLabel(topic, 'en'),
   // App branding
   syncNotices: {
-    missingBackup: 'The Gist contains no LeetSRS backup. Choose another Gist in Settings.',
+    missingBackup: 'The Gist contains no NeetSRS backup. Choose another Gist in Settings.',
     creationFailed: 'GitHub returned no ID for the created Gist. Check your Gists before trying again.',
     connectionSaveFailed: 'The connection could not be saved.',
     unavailable: 'You can continue learning. Sync will resume automatically when GitHub is available.',
@@ -18,13 +18,13 @@ const en = {
     unknown: 'Try again later.',
   },
   app: {
-    name: 'LeetSRS',
-    namePart1: 'Leet',
+    name: 'NeetSRS',
+    namePart1: 'Neet',
     namePart2: 'SRS',
   },
 
   releaseAnnouncement: {
-    title: 'LeetSRS 1.0',
+    title: 'NeetSRS 1.0',
     eyebrow: 'What’s new',
     roadmapsTitle: 'A plan for your next problem',
     roadmapsDescription:
@@ -41,7 +41,7 @@ const en = {
 
   ratingPrompt: {
     title: 'One week, no misses',
-    body: 'Nice streak. LeetSRS is built by one developer, and a quick review really helps.',
+    body: 'Nice streak. NeetSRS is built by one developer, and a quick review really helps.',
     rateOn: (store: string) => `Rate on ${store}`,
     noThanks: 'No thanks',
     dismiss: 'Close',
@@ -198,15 +198,10 @@ const en = {
     caughtUp: 'All caught up',
     caughtUpDescription: 'New reviews appear here when they’re due.',
     freshTitle: 'Start your first review',
-    freshDescription: 'Pick a roadmap and LeetSRS will hand you one problem at a time, then schedule reviews for you.',
+    freshDescription: 'Pick a roadmap and NeetSRS will hand you one problem at a time, then schedule reviews for you.',
     chooseRoadmap: 'Choose a roadmap',
-    addProblemsInstructions: 'Add problems on LeetCode using the',
+    addProblemsInstructions: 'Add problems on NeetCode using the',
     addProblemsButton: "button next to 'Submit'.",
-    leetcodeCnBanner: {
-      message: 'Using leetcode.cn? Enable support to add problems.',
-      enable: 'Enable',
-      dismiss: 'Dismiss',
-    },
   },
 
   // Home view - Stats bar
@@ -249,12 +244,12 @@ const en = {
     groups: { overdue: 'Overdue', today: 'Today', week: 'Next 7 days', later: 'Later', paused: 'Paused' },
     paused: 'Paused',
     hasNote: 'Has note',
-    openOnLeetcode: (title: string) => `Open ${title} on LeetCode`,
+    openOnSite: (title: string) => `Open ${title} on NeetCode`,
     solution: 'Solution',
     deleteCard: 'Delete card',
     loadingCards: 'Loading cards...',
     emptyTitle: 'No cards yet',
-    emptyDescription: 'Problems you save from Home, Roadmaps or LeetCode appear here.',
+    emptyDescription: 'Problems you save from Home, Roadmaps or NeetCode appear here.',
     browseRoadmaps: 'Browse roadmaps',
     noMatches: 'No matching cards',
     noMatchesHint: 'Try a different search or filter.',
@@ -306,12 +301,6 @@ const en = {
       resetEditorOnReviewQueue: 'Reset code when due',
       hint: 'Start due problems from a blank editor',
     },
-    preferredLeetcodeSite: 'Preferred LeetCode site',
-    leetcodeCn: {
-      label: 'leetcode.cn (力扣) support',
-      hint: 'Needs an extra browser permission',
-      enable: 'Enable',
-    },
 
     // Data section
     data: {
@@ -354,7 +343,7 @@ const en = {
 
       title: 'GitHub Gist sync',
       pitch: 'Back up your cards to a private Gist and keep every browser in step.',
-      gistDescription: 'LeetSRS Backup - Spaced Repetition Data',
+      gistDescription: 'NeetSRS Backup - Spaced Repetition Data',
       // Gist selection
       createNewGist: 'Create New Gist',
       // Sync controls
@@ -378,7 +367,7 @@ const en = {
       syncFailed: 'Sync failed',
       cancel: 'Cancel',
       syncDetails:
-        'LeetSRS compares the edit time of each complete dataset and replaces the older one. It does not merge individual cards.',
+        'NeetSRS compares the edit time of each complete dataset and replaces the older one. It does not merge individual cards.',
       openGist: 'Open backup Gist',
       change: 'Change',
       destination: 'Backup Gist',
@@ -393,7 +382,7 @@ const en = {
     about: {
       title: 'About',
       feedbackLink: 'Open an issue',
-      rateTitle: 'Enjoying LeetSRS?',
+      rateTitle: 'Enjoying NeetSRS?',
       rateBody: 'A quick rating helps others find it.',
       rateCta: 'Rate',
       copyright: '© 2026 Matt Drake',
@@ -401,7 +390,7 @@ const en = {
     },
   },
 
-  // Content script (LeetCode page integration)
+  // Content script (NeetCode page integration)
   contentScript: {
     review: 'Review',
     moreDue: (count: number) => `${count} more`,

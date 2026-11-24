@@ -2,7 +2,7 @@ import { browser } from 'wxt/browser';
 import { z } from 'zod';
 import { storage } from '#imports';
 import type { ProblemReference } from '@/shared/learning-document';
-import { type LeetcodeDomain, leetcodeDomainSchema } from '@/shared/leetcode-domain';
+import { type SiteDomain, siteDomainSchema } from '@/shared/site-domain';
 
 export const catalogProblemSchema = z.looseObject({
   frontendId: z.string().min(1),
@@ -12,7 +12,7 @@ export const catalogProblemSchema = z.looseObject({
   difficulty: z.enum(['easy', 'medium', 'hard']),
   isPaidOnly: z.boolean(),
   topics: z.array(z.string()),
-  sources: z.array(leetcodeDomainSchema),
+  sources: z.array(siteDomainSchema),
   youtubeUrl: z
     .string()
     .regex(/^https:\/\/www\.youtube\.com\/watch\?v=[A-Za-z0-9_-]{11}$/)
@@ -24,14 +24,14 @@ type Catalog = Record<string, CatalogProblem>;
 
 const catalogSchema = z.record(z.string(), catalogProblemSchema);
 
-// Every installed version downloads these files from main. Keep changes readable by
+// Built by scripts/build-catalog.mjs. Every installed version downloads these files from main. Keep changes readable by
 // catalogProblemSchema, or publish a breaking format under a new version.
-const CATALOG_FILE = 'data/leetcode-catalog-v1';
-const REMOTE_CATALOG_BASE = `https://raw.githubusercontent.com/mattcdrake/LeetSRS/main/public/${CATALOG_FILE}`;
+const CATALOG_FILE = 'data/neetcode-catalog-v1';
+const REMOTE_CATALOG_BASE = `https://raw.githubusercontent.com/ovltn/NeetSRS/main/public/${CATALOG_FILE}`;
 
 // Once downloaded, this copy replaces the bundled catalog for good.
 const downloadedCatalogItem = storage.defineItem<{ sha256: string; problems: Catalog }>(
-  'local:leetsrs:downloadedCatalogV1'
+  'local:neetsrs:downloadedCatalogV1'
 );
 
 let byId: Promise<Catalog> | undefined;
@@ -77,7 +77,7 @@ export async function getProblemsByFrontendIds(
   return problems.map(({ frontendId, domain }) => problemForDomain(catalog, frontendId, domain));
 }
 
-export async function getProblemBySlug(slug: string, domain: LeetcodeDomain): Promise<CatalogProblem | undefined> {
+export async function getProblemBySlug(slug: string, domain: SiteDomain): Promise<CatalogProblem | undefined> {
   byId ??= loadCatalog();
   bySlug ??= byId.then((catalog) =>
     Object.fromEntries(Object.values(catalog).map((problem) => [problem.slug, problem]))
@@ -86,7 +86,7 @@ export async function getProblemBySlug(slug: string, domain: LeetcodeDomain): Pr
   return problemForDomain(catalog, slug, domain);
 }
 
-function problemForDomain(catalog: Catalog, key: string, domain: LeetcodeDomain): CatalogProblem | undefined {
+function problemForDomain(catalog: Catalog, key: string, domain: SiteDomain): CatalogProblem | undefined {
   const problem = Object.hasOwn(catalog, key) ? catalog[key] : undefined;
   return problem?.sources.includes(domain) ? problem : undefined;
 }

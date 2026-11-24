@@ -13,7 +13,7 @@ import { createMockCard } from '@/test/utils/card-mocks';
 import { testCatalog } from '@/test/utils/catalog-mocks';
 import { buildLearningDocument } from '@/test/utils/learning-document-mocks';
 import { createServiceMock } from '@/test/utils/service-mocks';
-import { LeetSrsControl } from '../LeetSrsControl';
+import { NeetSrsControl } from '../NeetSrsControl';
 
 vi.mock('@/shared/background-service');
 beforeEach(async () => {
@@ -36,10 +36,10 @@ beforeEach(async () => {
 });
 
 it.each([3, 5])('limits shortcut %s to the open panel and ignores repeated presses', async (key) => {
-  render(<LeetSrsControl />);
+  render(<NeetSrsControl />);
   fireEvent.keyDown(document.body, { key: String(key) });
   expect((await readLearningDocument()).cards).toEqual({});
-  fireEvent.click(await screen.findByRole('button', { name: 'LeetSRS' }));
+  fireEvent.click(await screen.findByRole('button', { name: 'NeetSRS' }));
   const good = await screen.findByRole('button', { name: 'Good' });
   await waitFor(() => expect(good).toBeEnabled());
   fireEvent.keyDown(good, { key: String(key), repeat: true });
@@ -51,8 +51,8 @@ it.each([3, 5])('limits shortcut %s to the open panel and ignores repeated press
 });
 
 it('Escape restores focus without saving or disabling auto-open, and the hint appears only once', async () => {
-  render(<LeetSrsControl />);
-  const trigger = await screen.findByRole('button', { name: 'LeetSRS' });
+  render(<NeetSrsControl />);
+  const trigger = await screen.findByRole('button', { name: 'NeetSRS' });
   fireEvent.click(trigger);
   await screen.findByText('Opens after each accepted solve.');
   fireEvent.keyDown(screen.getByRole('dialog'), { key: 'Escape' });
@@ -65,8 +65,8 @@ it('Escape restores focus without saving or disabling auto-open, and the hint ap
 });
 
 it('retries failed saves once, retaining pending work and confirmation across panel dismissal', async () => {
-  render(<LeetSrsControl />);
-  const trigger = await screen.findByRole('button', { name: 'LeetSRS' });
+  render(<NeetSrsControl />);
+  const trigger = await screen.findByRole('button', { name: 'NeetSRS' });
   fireEvent.click(trigger);
   const good = await screen.findByRole('button', { name: 'Good' });
   await screen.findByText('Opens after each accepted solve.');
@@ -101,15 +101,15 @@ it('shows next problems before rating and refreshes the daily allowance after sa
       activeRoadmapId: 'blind-75',
     })
   );
-  render(<LeetSrsControl />);
-  const trigger = await screen.findByRole('button', { name: 'LeetSRS' });
+  render(<NeetSrsControl />);
+  const trigger = await screen.findByRole('button', { name: 'NeetSRS' });
   fireEvent.click(trigger);
   const review = await screen.findByRole('link', { name: /^2\. Add Two Numbers Review/ });
-  expect(review).toHaveAttribute('href', 'https://leetcode.com/problems/add-two-numbers/description/');
+  expect(review).toHaveAttribute('href', 'https://neetcode.io/problems/add-two-numbers/question');
   expect(review).not.toHaveAttribute('target');
   expect(await screen.findByRole('link', { name: /^3\. Longest Substring Blind 75/ })).toHaveAttribute(
     'href',
-    'https://leetcode.com/problems/longest-substring/description/'
+    'https://neetcode.io/problems/longest-substring/question'
   );
   expect(screen.queryByRole('link', { name: /Two Sum/ })).not.toBeInTheDocument();
   fireEvent.click(screen.getByRole('button', { name: 'Good' }));
@@ -127,8 +127,8 @@ it('shows next problems before rating and refreshes the daily allowance after sa
 });
 
 it('undoes a save back to the rating view, and refuses once the card changed', async () => {
-  render(<LeetSrsControl />);
-  fireEvent.click(await screen.findByRole('button', { name: 'LeetSRS' }));
+  render(<NeetSrsControl />);
+  fireEvent.click(await screen.findByRole('button', { name: 'NeetSRS' }));
   await waitFor(() => expect(screen.getByRole('button', { name: 'Good' })).toBeEnabled());
   fireEvent.click(screen.getByRole('button', { name: 'Good' }));
   fireEvent.click(await screen.findByRole('button', { name: 'Undo' }));
@@ -163,12 +163,12 @@ it('keeps the Up next and undo shortcuts the same before and after saving', asyn
   };
   document.addEventListener('click', recordNavigation);
   onTestFinished(() => document.removeEventListener('click', recordNavigation));
-  render(<LeetSrsControl />);
-  fireEvent.click(await screen.findByRole('button', { name: 'LeetSRS' }));
+  render(<NeetSrsControl />);
+  fireEvent.click(await screen.findByRole('button', { name: 'NeetSRS' }));
   await screen.findByRole('link', { name: /^3\. Longest Substring Blind 75/ });
   const panel = screen.getByRole('group');
   fireEvent.keyDown(panel, { key: 'r', code: 'KeyR' });
-  expect(opened).toEqual(['https://leetcode.com/problems/add-two-numbers/description/']);
+  expect(opened).toEqual(['https://neetcode.io/problems/add-two-numbers/question']);
   fireEvent.keyDown(panel, { key: 'u', code: 'KeyU' });
   expect(screen.getByRole('button', { name: 'Good' })).toBeInTheDocument();
 
@@ -176,7 +176,7 @@ it('keeps the Up next and undo shortcuts the same before and after saving', asyn
   await screen.findByRole('button', { name: 'Undo' });
   // Dvorak types N from the QWERTY L position.
   fireEvent.keyDown(panel, { key: 'n', code: 'KeyL' });
-  expect(opened.at(-1)).toBe('https://leetcode.com/problems/longest-substring/description/');
+  expect(opened.at(-1)).toBe('https://neetcode.io/problems/longest-substring/question');
   fireEvent.keyDown(panel, { key: 'u', code: 'KeyU' });
   await waitFor(() => expect(screen.getByRole('button', { name: 'Good' })).toBeEnabled());
   expect((await readLearningDocument()).cards['1']).toBeUndefined();

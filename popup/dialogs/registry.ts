@@ -1,6 +1,5 @@
 import type { ComponentType } from 'react';
 import type { ViewId } from '@/popup/components/BottomNav';
-import { ReleaseAnnouncement } from './ReleaseAnnouncement';
 import { loadStreakRatingEligibility, STREAK_RATING_DIALOG_ID, StreakRatingPrompt } from './StreakRatingPrompt';
 
 export interface PopupDialogContentProps {
@@ -14,13 +13,8 @@ export interface PopupDialogEntry {
   Content: ComponentType<PopupDialogContentProps>;
 }
 
-// Array order is display order. Replace the release entry for each new announcement.
+// Array order is display order.
 export const popupDialogRegistry: readonly PopupDialogEntry[] = [
-  {
-    id: 'release-1.0',
-    loadEligibility: async () => true,
-    Content: ReleaseAnnouncement,
-  },
   {
     id: STREAK_RATING_DIALOG_ID,
     loadEligibility: loadStreakRatingEligibility,

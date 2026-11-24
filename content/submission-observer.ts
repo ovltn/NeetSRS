@@ -1,25 +1,27 @@
 import { getCurrentProblemSlug } from './page-context';
 
-export const ACCEPTED_SUBMISSION_MESSAGE = 'leetsrs:accepted-submission';
-const SUBMISSION_URL = /\/(submit|check)\/?(?:\?|$)/;
+export const ACCEPTED_SUBMISSION_MESSAGE = 'neetsrs:accepted-submission';
+// NeetCode judges a submission in one request: POST /api/executeCodeFunctionHttp with
+// {data: {problemId, rawCode, lang}}, answered by {data: {status: {description}}}.
+const SUBMISSION_URL = /\/executeCodeFunctionHttp\/?(?:\?|$)/;
+const ACCEPTED = 'Accepted';
 interface AcceptedSubmission {
   slug: string;
   submissionId: string;
 }
 
-// Runs in the page world so both fetch and XHR responses are observable. Only
-// results paired with a new submit request can open the isolated content UI.
+// Runs in the page world so both fetch and XHR responses are observable. Only an
+// Accepted result for the problem on screen can open the isolated content UI.
 export function observeSubmissions(onAccepted: (submission: AcceptedSubmission) => void): () => void {
-  const pending = new Map<string, string>();
   let active = true;
   let navigation = 0;
+  let submissions = 0;
   let currentSlug = getCurrentProblemSlug();
   const onNavigate = () => {
     const slug = getCurrentProblemSlug();
     if (slug !== currentSlug) {
       currentSlug = slug;
       navigation++;
-      pending.clear();
     }
   };
   const restoreHistory = (['pushState', 'replaceState'] as const).map((method) => {
@@ -42,32 +44,20 @@ export function observeSubmissions(onAccepted: (submission: AcceptedSubmission) 
     { url: string; method: string; slug: string | null; navigation: number }
   >();
 
-  function inspect(rawUrl: string, method: string, slug: string | null, startedNavigation: number, data: unknown) {
-    if (
-      startedNavigation !== navigation ||
-      !active ||
-      !slug ||
-      slug !== getCurrentProblemSlug() ||
-      typeof data !== 'object' ||
-      data === null
-    )
-      return;
+  function inspect(
+    rawUrl: string,
+    method: string,
+    slug: string | null,
+    startedNavigation: number,
+    requestBody: unknown,
+    data: unknown
+  ) {
+    if (startedNavigation !== navigation || !active || !slug || slug !== getCurrentProblemSlug()) return;
     const url = new URL(rawUrl, window.location.href);
-    if (url.origin !== window.location.origin) return;
-    const submitSlug = url.pathname.match(/^\/problems\/([^/]+)\/submit\/?$/)?.[1];
-    if (method.toUpperCase() === 'POST' && submitSlug === slug && 'submission_id' in data) {
-      const id = data.submission_id;
-      if (typeof id === 'number' || typeof id === 'string') {
-        // Bound the tracker even if the page stops polling an abandoned submission.
-        if (pending.size >= 100) pending.clear();
-        pending.set(String(id), slug);
-      }
-      return;
-    }
-    const id = url.pathname.match(/^\/submissions\/detail\/(\d+)\/(?:v2\/)?check\/?$/)?.[1];
-    if (!id || pending.get(id) !== slug || !('state' in data) || data.state !== 'SUCCESS') return;
-    pending.delete(id);
-    if ('status_code' in data && data.status_code === 10) onAccepted({ slug, submissionId: id });
+    if (url.origin !== window.location.origin || method.toUpperCase() !== 'POST') return;
+    if (submittedProblemId(requestBody) !== slug || statusDescription(data) !== ACCEPTED) return;
+    // NeetCode returns no submission ID, so number them per page.
+    onAccepted({ slug, submissionId: String(++submissions) });
   }
 
   const fetch: typeof window.fetch = async (input, init) => {
@@ -75,12 +65,20 @@ export function observeSubmissions(onAccepted: (submission: AcceptedSubmission) 
     const method = init?.method ?? (input instanceof Request ? input.method : 'GET');
     const slug = getCurrentProblemSlug();
     const startedNavigation = navigation;
+    const observed = SUBMISSION_URL.test(url);
+    const requestBody =
+      observed && init?.body === undefined && input instanceof Request
+        ? await input
+            .clone()
+            .text()
+            .catch(() => undefined)
+        : init?.body;
     const response = await originalFetch.call(window, input, init);
-    if (SUBMISSION_URL.test(url)) {
+    if (observed) {
       void response
         .clone()
         .json()
-        .then((data: unknown) => inspect(url, method, slug, startedNavigation, data))
+        .then((data: unknown) => inspect(url, method, slug, startedNavigation, requestBody, data))
         .catch(() => {});
     }
     return response;
@@ -104,7 +102,7 @@ export function observeSubmissions(onAccepted: (submission: AcceptedSubmission) 
         () => {
           try {
             const data: unknown = this.responseType === 'json' ? this.response : JSON.parse(this.responseText);
-            inspect(request.url, request.method, request.slug, request.navigation, data);
+            inspect(request.url, request.method, request.slug, request.navigation, body, data);
           } catch {
             /* Non-JSON responses leave the host page unaffected. */
           }
@@ -121,9 +119,25 @@ export function observeSubmissions(onAccepted: (submission: AcceptedSubmission) 
     active = false;
     window.removeEventListener('popstate', onNavigate);
     for (const restore of restoreHistory) restore();
-    pending.clear();
     if (window.fetch === fetch) window.fetch = originalFetch;
     if (XMLHttpRequest.prototype.open === open) XMLHttpRequest.prototype.open = originalOpen;
     if (XMLHttpRequest.prototype.send === send) XMLHttpRequest.prototype.send = originalSend;
   };
+}
+
+function field(value: unknown, key: string): unknown {
+  return typeof value === 'object' && value !== null ? (value as Record<string, unknown>)[key] : undefined;
+}
+
+function submittedProblemId(body: unknown): unknown {
+  if (typeof body !== 'string') return undefined;
+  try {
+    return field(field(JSON.parse(body), 'data'), 'problemId');
+  } catch {
+    return undefined;
+  }
+}
+
+function statusDescription(response: unknown): unknown {
+  return field(field(field(response, 'data'), 'status'), 'description');
 }

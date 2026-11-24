@@ -1,8 +1,8 @@
 {
   "extName": {
-    "message": "LeetSRS — Spaced Repetition for LeetCode"
+    "message": "NeetSRS — Spaced Repetition for NeetCode"
   },
   "extDescription": {
-    "message": "LeetCode 题目的间隔重复练习扩展"
+    "message": "NeetCode 题目的间隔重复练习扩展"
   }
 }

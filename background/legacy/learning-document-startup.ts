@@ -20,27 +20,27 @@ const legacySettingNames = [
 ] as const;
 
 function gatherLegacyDocument(local: Record<string, unknown>, sync: Record<string, unknown>) {
-  const version = Object.hasOwn(local, 'leetsrs:schemaVersion') ? local['leetsrs:schemaVersion'] : 0;
+  const version = Object.hasOwn(local, 'neetsrs:schemaVersion') ? local['neetsrs:schemaVersion'] : 0;
   const schemaVersion = z.int().min(0).max(5).parse(version);
   const data: Record<string, unknown> = { schemaVersion };
 
   for (const name of ['cards', 'stats', 'dataUpdatedAt']) {
-    if (Object.hasOwn(local, `leetsrs:${name}`)) {
-      data[name] = local[`leetsrs:${name}`];
+    if (Object.hasOwn(local, `neetsrs:${name}`)) {
+      data[name] = local[`neetsrs:${name}`];
     }
   }
 
   data.settings = Object.fromEntries(
     legacySettingNames
-      .filter((name) => Object.hasOwn(sync, `leetsrs:${name}`))
-      .map((name) => [name, sync[`leetsrs:${name}`]])
+      .filter((name) => Object.hasOwn(sync, `neetsrs:${name}`))
+      .map((name) => [name, sync[`neetsrs:${name}`]])
   );
 
   if (schemaVersion < 4) {
     data.notes = Object.fromEntries(
       Object.entries(local)
-        .filter(([key]) => key.startsWith('leetsrs:notes:'))
-        .map(([key, value]) => [key.slice('leetsrs:notes:'.length), value])
+        .filter(([key]) => key.startsWith('neetsrs:notes:'))
+        .map(([key, value]) => [key.slice('neetsrs:notes:'.length), value])
     );
   }
 
@@ -78,13 +78,13 @@ export async function initializeLearningDocument(): Promise<void> {
 export async function removeLegacyLearningData(): Promise<void> {
   const local = await storage.snapshot('local');
   await storage.removeItems([
-    'local:leetsrs:cards',
-    'local:leetsrs:stats',
-    'local:leetsrs:dataUpdatedAt',
-    'local:leetsrs:schemaVersion',
+    'local:neetsrs:cards',
+    'local:neetsrs:stats',
+    'local:neetsrs:dataUpdatedAt',
+    'local:neetsrs:schemaVersion',
     ...Object.keys(local)
-      .filter((key) => key.startsWith('leetsrs:notes:'))
+      .filter((key) => key.startsWith('neetsrs:notes:'))
       .map((key): `local:${string}` => `local:${key}`),
-    ...legacySettingNames.map((name): `sync:${string}` => `sync:leetsrs:${name}`),
+    ...legacySettingNames.map((name): `sync:${string}` => `sync:neetsrs:${name}`),
   ]);
 }

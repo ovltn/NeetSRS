@@ -13,11 +13,12 @@ export class GithubAuthorizationError extends Error {
   readonly code = 'authentication';
 }
 
-const signInRequestItem = storage.defineItem<unknown>('session:leetsrs:githubSignInRequest');
+const signInRequestItem = storage.defineItem<unknown>('session:neetsrs:githubSignInRequest');
 const SIGN_IN_REQUEST_TTL = 5 * 60 * 1000;
 let signInRequests = Promise.resolve();
 
-const AUTH_ORIGIN = 'https://auth.leetsrs.com';
+// Placeholder: NeetSRS has no sign-in server yet, and .invalid never resolves.
+const AUTH_ORIGIN = 'https://auth.neetsrs.invalid';
 const accountSchema = z.object({ id: z.number().int().positive(), login: z.string().min(1) });
 const authorizationSchema = z.object({
   account: accountSchema,

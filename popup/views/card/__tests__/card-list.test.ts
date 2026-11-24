@@ -33,11 +33,11 @@ describe('filterAndSortCards', () => {
     const cards = [
       createCard('two-sum', '1', 'Two Sum'),
       createCard('add-two-numbers', '2', 'Add Two Numbers'),
-      { ...createCard('cn', '3', 'Longest Substring'), domain: 'leetcode.cn' as const, translatedTitle: '最长子串' },
+      createCard('longest', '3', 'Longest Substring'),
     ];
     expect(getIds(filterAndSortCards(cards, 'tWo SuM'))).toEqual(['two-sum']);
     expect(getIds(filterAndSortCards(cards, '2'))).toEqual(['add-two-numbers']);
-    expect(getIds(filterAndSortCards(cards, '子串'))).toEqual(['cn']);
+    expect(getIds(filterAndSortCards(cards, 'SUBSTR'))).toEqual(['longest']);
     expect(getIds(filterAndSortCards(cards, 'missing'))).toEqual([]);
   });
 

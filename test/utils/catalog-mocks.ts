@@ -9,7 +9,7 @@ export const testCatalog: CatalogProblem[] = [
     difficulty: 'easy',
     isPaidOnly: false,
     topics: ['array'],
-    sources: ['leetcode.com', 'leetcode.cn'],
+    sources: ['neetcode.io'],
   },
   {
     frontendId: '2',
@@ -19,7 +19,7 @@ export const testCatalog: CatalogProblem[] = [
     difficulty: 'medium',
     isPaidOnly: false,
     topics: [],
-    sources: ['leetcode.com', 'leetcode.cn'],
+    sources: ['neetcode.io'],
   },
   {
     frontendId: '3',
@@ -29,6 +29,6 @@ export const testCatalog: CatalogProblem[] = [
     difficulty: 'medium',
     isPaidOnly: false,
     topics: [],
-    sources: ['leetcode.com'],
+    sources: ['neetcode.io'],
   },
 ];

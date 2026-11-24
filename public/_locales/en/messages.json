@@ -1,8 +1,8 @@
 {
   "extName": {
-    "message": "LeetSRS — Spaced Repetition for LeetCode"
+    "message": "NeetSRS — Spaced Repetition for NeetCode"
   },
   "extDescription": {
-    "message": "LeetSRS is a Chrome extension that helps you remember what you learn on LeetCode through spaced repetition."
+    "message": "NeetSRS is a Chrome extension that helps you remember what you learn on NeetCode through spaced repetition."
   }
 }

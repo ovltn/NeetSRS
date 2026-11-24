@@ -25,7 +25,7 @@ beforeEach(async () => {
   await getRegisteredBackground().resetAllData();
   await seedGithubAuthorization();
   await fakeBrowser.storage.local.set({
-    'leetsrs:gistConnection': { accountId: 1, gistId: 'gist', enabled: true },
+    'neetsrs:gistConnection': { accountId: 1, gistId: 'gist', enabled: true },
   });
   await vi.waitFor(() => expect(github.update).toHaveBeenCalledOnce());
   await vi.waitFor(async () =>
@@ -60,7 +60,7 @@ it('leaves edits made during an upload for the next minute sync', async () => {
   await triggerSyncAlarm();
 
   expect(github.update).toHaveBeenCalledTimes(2);
-  expect(JSON.parse(github.update.mock.calls[1][1]['leetsrs-backup.json'].content).cards['1'].note).toBe('Next sync');
+  expect(JSON.parse(github.update.mock.calls[1][1]['neetsrs-backup.json'].content).cards['1'].note).toBe('Next sync');
 });
 
 it('ignores a pending download after an external connection change', async () => {
@@ -70,7 +70,7 @@ it('ignores a pending download after an external connection change', async () =>
   await vi.waitFor(() => expect(github.get).toHaveBeenCalledOnce());
 
   await fakeBrowser.storage.local.set({
-    'leetsrs:gistConnection': { accountId: 1, gistId: 'other-gist', enabled: true },
+    'neetsrs:gistConnection': { accountId: 1, gistId: 'other-gist', enabled: true },
   });
   await vi.waitFor(() => expect(github.get).toHaveBeenCalledWith('other-gist'));
   await vi.waitFor(async () =>
@@ -82,7 +82,7 @@ it('ignores a pending download after an external connection change', async () =>
   const uploads = github.update.mock.calls.length;
   download.resolve({
     files: {
-      'leetsrs-backup.json': {
+      'neetsrs-backup.json': {
         content: JSON.stringify(buildLearningDocument({ settings: { theme: 'light' }, dataUpdatedAt: '2099-01-01' })),
       },
     },

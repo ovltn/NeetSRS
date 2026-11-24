@@ -1,7 +1,7 @@
 import { ACCEPTED_SUBMISSION_MESSAGE, observeSubmissions } from '@/content/submission-observer';
 
 export default defineContentScript({
-  matches: ['*://*.leetcode.com/*', '*://*.leetcode.cn/*'],
+  matches: ['*://neetcode.io/*'],
   runAt: 'document_start',
   world: 'MAIN',
   main() {

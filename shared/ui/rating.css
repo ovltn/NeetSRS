@@ -1,4 +1,4 @@
-/* Rating anatomy shared by the LeetCode panel and the popup sheet. It reads only --ls-* tokens
+/* Rating anatomy shared by the NeetCode panel and the popup sheet. It reads only --ls-* tokens
    from shared/ui/tokens.css. */
 .rating-panel {
   padding: 0 0 6px;

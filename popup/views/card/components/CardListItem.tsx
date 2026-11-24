@@ -13,7 +13,7 @@ import { useSettingsQuery } from '@/popup/queries/settings';
 import { buttonInteraction, iconButton, textButton } from '@/popup/styles';
 import { localDaysUntil } from '@/shared/calendar';
 import { formatDue } from '@/shared/due';
-import { getLeetcodeProblemUrl } from '@/shared/leetcode-links';
+import { getProblemUrl } from '@/shared/problem-links';
 import { getProblemTitle } from '@/shared/ui/problem-title';
 import { useI18n } from '../../../contexts/I18nContext';
 
@@ -26,7 +26,7 @@ export function CardListItem({ card, now }: CardListItemProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const t = useI18n();
   const panelId = useId();
-  const title = getProblemTitle(card, card.domain);
+  const title = getProblemTitle(card);
 
   const row = (
     <div
@@ -70,10 +70,10 @@ export function CardListItem({ card, now }: CardListItemProps) {
         </span>
       </Button>
       <Link
-        href={getLeetcodeProblemUrl(card)}
+        href={getProblemUrl(card)}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={t.cardsView.openOnLeetcode(title)}
+        aria-label={t.cardsView.openOnSite(title)}
         className={`size-8 -mr-1 shrink-0 rounded-md grid place-items-center text-tertiary duration-[120ms] hover:bg-tertiary hover:text-primary ${buttonInteraction}`}
       >
         <LuArrowUpRight aria-hidden="true" className="size-4" strokeWidth={1.75} />

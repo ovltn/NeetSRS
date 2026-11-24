@@ -6,7 +6,7 @@ import type { Card, ProblemReference } from '@/shared/learning-document';
 const MOCK_TIMESTAMP = Date.parse('2024-01-01T00:00:00.000Z');
 
 export function buildProblem(overrides: Partial<ProblemReference> = {}): ProblemReference {
-  return { frontendId: '1', domain: 'leetcode.com', ...overrides };
+  return { frontendId: '1', domain: 'neetcode.io', ...overrides };
 }
 
 export function buildCatalogProblem(overrides: Partial<CatalogProblem> = {}): CatalogProblem {
@@ -16,7 +16,7 @@ export function buildCatalogProblem(overrides: Partial<CatalogProblem> = {}): Ca
     translatedTitle: '两数之和',
     isPaidOnly: false,
     topics: ['array'],
-    sources: ['leetcode.com', 'leetcode.cn'],
+    sources: ['neetcode.io'],
     frontendId: '1',
     difficulty: 'easy',
     ...overrides,
@@ -26,7 +26,7 @@ export function buildCatalogProblem(overrides: Partial<CatalogProblem> = {}): Ca
 export const createMockCard = (state: State, overrides: Partial<Card> = {}): Card => {
   return {
     frontendId: '1',
-    domain: 'leetcode.com',
+    domain: 'neetcode.io',
     createdAt: MOCK_TIMESTAMP,
     fsrs: {
       state,

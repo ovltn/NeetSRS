@@ -1,6 +1,6 @@
 import type { SVGProps } from 'react';
 
-export function LeetSRSLogo(props: SVGProps<SVGSVGElement>) {
+export function NeetSRSLogo(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       aria-hidden="true"

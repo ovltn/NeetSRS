@@ -21,11 +21,11 @@ export function startBackground() {
     await initializeLearningDocument();
     // ponytail: PAT keys retired by OAuth in 1.0.0 (#564); drop once no installs predate it.
     await storage.removeItems([
-      'sync:leetsrs:gistConnection',
-      'sync:leetsrs:githubPat',
-      'sync:leetsrs:gistId',
-      'sync:leetsrs:gistSyncEnabled',
-      'local:leetsrs:oauthMigration',
+      'sync:neetsrs:gistConnection',
+      'sync:neetsrs:githubPat',
+      'sync:neetsrs:gistId',
+      'sync:neetsrs:gistSyncEnabled',
+      'local:neetsrs:oauthMigration',
     ]);
 
     const existingAlarm = await browser.alarms.get(SYNC_ALARM_NAME);

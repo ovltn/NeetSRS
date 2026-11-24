@@ -23,25 +23,25 @@ describe('learning document startup', () => {
     const cards = structuredClone(backup.data.cards);
     Reflect.deleteProperty(cards['two-sum'], 'domain');
     const local: Record<string, unknown> = {
-      'leetsrs:cards': cards,
-      'leetsrs:stats': backup.data.stats,
-      'leetsrs:dataUpdatedAt': backup.dataUpdatedAt,
-      'leetsrs:lastSyncTime': 'local-status',
-      'leetsrs:lastSyncDirection': 'pull',
+      'neetsrs:cards': cards,
+      'neetsrs:stats': backup.data.stats,
+      'neetsrs:dataUpdatedAt': backup.dataUpdatedAt,
+      'neetsrs:lastSyncTime': 'local-status',
+      'neetsrs:lastSyncDirection': 'pull',
       unrelated: 'keep',
     };
     for (const [id, note] of Object.entries(backup.data.notes)) {
-      local[`leetsrs:notes:${id}`] = note;
+      local[`neetsrs:notes:${id}`] = note;
     }
     const sync = {
-      'leetsrs:theme': 'light',
-      'leetsrs:maxNewCardsPerDay': 0,
-      'leetsrs:badgeEnabled': false,
-      'leetsrs:resetEditorOnDueReview': false,
-      'leetsrs:autoClearLeetcode': false,
-      'leetsrs:githubPat': ' token ',
-      'leetsrs:gistId': 'legacy-gist',
-      'leetsrs:gistSyncEnabled': true,
+      'neetsrs:theme': 'light',
+      'neetsrs:maxNewCardsPerDay': 0,
+      'neetsrs:badgeEnabled': false,
+      'neetsrs:resetEditorOnDueReview': false,
+      'neetsrs:autoClearLeetcode': false,
+      'neetsrs:githubPat': ' token ',
+      'neetsrs:gistId': 'legacy-gist',
+      'neetsrs:gistSyncEnabled': true,
       unrelated: 'keep',
     };
     await fakeBrowser.storage.local.set(local);
@@ -61,15 +61,15 @@ describe('learning document startup', () => {
     expect(await readLearningDocument()).toEqual(expected);
     expect(await readGistConnection()).toEqual({ accountId: null, gistId: null, enabled: false });
     expect(await fakeBrowser.storage.local.get()).toEqual({
-      'leetsrs:learningDocument': expected,
-      'leetsrs:lastSyncTime': 'local-status',
-      'leetsrs:lastSyncDirection': 'pull',
+      'neetsrs:learningDocument': expected,
+      'neetsrs:lastSyncTime': 'local-status',
+      'neetsrs:lastSyncDirection': 'pull',
       unrelated: 'keep',
     });
     expect(await fakeBrowser.storage.sync.get()).toEqual({
-      'leetsrs:githubPat': ' token ',
-      'leetsrs:gistId': 'legacy-gist',
-      'leetsrs:gistSyncEnabled': true,
+      'neetsrs:githubPat': ' token ',
+      'neetsrs:gistId': 'legacy-gist',
+      'neetsrs:gistSyncEnabled': true,
       unrelated: 'keep',
     });
   });
@@ -77,16 +77,16 @@ describe('learning document startup', () => {
   it('treats a saved document as authoritative over stale legacy storage', async () => {
     const { backup, converted, legacyConverted } = validLegacyBackup();
     await fakeBrowser.storage.local.set({
-      'leetsrs:learningDocument': {
+      'neetsrs:learningDocument': {
         ...legacyConverted,
         schemaVersion: 7,
         settings: { language: 'de' },
         dataUpdatedAt: backup.dataUpdatedAt,
       },
-      'leetsrs:cards': 'invalid stale cards',
-      'leetsrs:schemaVersion': 'invalid stale version',
+      'neetsrs:cards': 'invalid stale cards',
+      'neetsrs:schemaVersion': 'invalid stale version',
     });
-    await fakeBrowser.storage.sync.set({ 'leetsrs:gistConnection': 'do not read or replace' });
+    await fakeBrowser.storage.sync.set({ 'neetsrs:gistConnection': 'do not read or replace' });
     vi.spyOn(storage, 'snapshot').mockRejectedValue(new Error('Must not gather legacy storage'));
 
     await initializeLearningDocument();
@@ -100,24 +100,24 @@ describe('learning document startup', () => {
         dataUpdatedAt: backup.dataUpdatedAt,
       })
     );
-    expect(await fakeBrowser.storage.sync.get()).toEqual({ 'leetsrs:gistConnection': 'do not read or replace' });
+    expect(await fakeBrowser.storage.sync.get()).toEqual({ 'neetsrs:gistConnection': 'do not read or replace' });
   });
 
   it('retries a rejected document write from intact legacy data', async () => {
     const { backup, converted } = validLegacyBackup();
     const local = {
-      'leetsrs:schemaVersion': 2,
-      'leetsrs:cards': backup.data.cards,
-      'leetsrs:stats': backup.data.stats,
-      'leetsrs:notes:valid-com': backup.data.notes['valid-com'],
-      'leetsrs:dataUpdatedAt': backup.dataUpdatedAt,
+      'neetsrs:schemaVersion': 2,
+      'neetsrs:cards': backup.data.cards,
+      'neetsrs:stats': backup.data.stats,
+      'neetsrs:notes:valid-com': backup.data.notes['valid-com'],
+      'neetsrs:dataUpdatedAt': backup.dataUpdatedAt,
     };
     const sync = {
-      'leetsrs:theme': 'dark',
-      'leetsrs:autoClearLeetcode': false,
-      'leetsrs:githubPat': 'legacy-secret',
-      'leetsrs:gistId': 'legacy-gist',
-      'leetsrs:gistSyncEnabled': true,
+      'neetsrs:theme': 'dark',
+      'neetsrs:autoClearLeetcode': false,
+      'neetsrs:githubPat': 'legacy-secret',
+      'neetsrs:gistId': 'legacy-gist',
+      'neetsrs:gistSyncEnabled': true,
     };
     await fakeBrowser.storage.local.set(local);
     await fakeBrowser.storage.sync.set(sync);

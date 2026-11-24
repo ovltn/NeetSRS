@@ -17,13 +17,22 @@
 | ------------------------ | ------------------------------------------------------------------------ |
 | `entrypoints/`           | Thin WXT entrypoints that load the code below                            |
 | `background/`            | Service worker: reviews, sync, GitHub sign-in, badge                     |
-| `content/`, `content/ui` | LeetCode.com integration and its panel                                   |
+| `content/`, `content/ui` | neetcode.io integration and its panel                                    |
 | `popup/`                 | Popup `views/`, `components/`, `queries/`, `dialogs/`                    |
 | `shared/`                | Domain logic, `i18n/` (`en.ts`, `zh-CN.ts`), `ui/` tokens and components |
 | `backend/`               | Cloudflare worker for GitHub OAuth                                       |
 | `test/`                  | Test setup, `utils/` fixtures and mocks                                  |
 
-Tests live in `__tests__/` beside the code and are grouped by workflow, not by component; for example, `content/ui/__tests__/LeetSrsControl.test.tsx` covers the rating menu.
+Tests live in `__tests__/` beside the code and are grouped by workflow, not by component; for example, `content/ui/__tests__/NeetSrsControl.test.tsx` covers the rating menu.
+
+## NeetCode specifics
+
+NeetSRS is a fork of LeetSRS for neetcode.io.
+
+- A card's `frontendId` is still the LeetCode problem number; a catalog problem's `slug` is NeetCode's own slug (`duplicate-integer`), which is what the page URL and links use.
+- `scripts/build-catalog.mjs` generates `public/data/neetcode-catalog-v1.json` and trims the roadmaps. Do not edit them by hand.
+- `content/submission-observer.ts` and `content/editor-reset.ts` depend on NeetCode's private API and markup; check them against the live site when they stop working.
+- Gist sync is hidden unless `WXT_GITHUB_CLIENT_ID` is set, and its sign-in server address is a placeholder.
 
 ## Commands
 
@@ -40,11 +49,10 @@ Tests live in `__tests__/` beside the code and are grouped by workflow, not by c
 
 ## UI and styling
 
-- The design system in [docs/design-system/](docs/design-system/README.md) defines the colours, type, spacing, shapes and icons for both the popup and the LeetCode.com panel. Read its README, `tokens.json` and the relevant `components/*/README.md` before changing UI.
-- Edit the design system in the repo, then publish it to the [claude.ai copy](https://claude.ai/artifact/SHkAWzAUpZ6rPfxWCLjK1W) with the `design-system-sync` skill.
+- The design system in [docs/design-system/](docs/design-system/README.md) defines the colours, type, spacing, shapes and icons for both the popup and the neetcode.io panel. Read its README, `tokens.json` and the relevant `components/*/README.md` before changing UI.
 - When the code and the design system disagree, follow the design system.
 - Style with the `--ls-*` tokens from `shared/ui/tokens.css`; do not hard-code colours or add one-off sizes.
-- Set text with the named sizes: `text-hero`, `text-stat`, `text-title`, `text-body`, `text-xs` and `text-caption` in the popup (`popup/App.css`), and `text-panel-title`, `text-panel-body` and `text-panel-meta` on LeetCode (`content/ui/shadow.css`). Use `primaryButton` from `popup/styles.ts` for filled brand buttons.
+- Set text with the named sizes: `text-hero`, `text-stat`, `text-title`, `text-body`, `text-xs` and `text-caption` in the popup (`popup/App.css`), and `text-panel-title`, `text-panel-body` and `text-panel-meta` on NeetCode (`content/ui/shadow.css`). Use `primaryButton` from `popup/styles.ts` for filled brand buttons.
 
 ## Tests
 

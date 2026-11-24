@@ -15,7 +15,7 @@ export function validLegacyBackup() {
       id: 'valid-cn',
       slug: 'cn-problem',
       leetcodeId: '2',
-      domain: 'leetcode.cn' as const,
+      domain: 'neetcode.io' as const,
       paused: false,
     },
   };
@@ -42,7 +42,7 @@ export function validLegacyBackup() {
     converted: {
       cards: {
         '1': { ...learning, frontendId: '1', fsrs: card.fsrs, note: 'Keep this note' },
-        '2': { ...learning, frontendId: '2', fsrs: card.fsrs, domain: 'leetcode.cn' as const, paused: false },
+        '2': { ...learning, frontendId: '2', fsrs: card.fsrs, domain: 'neetcode.io' as const, paused: false },
       },
       reviewActivity: { date: '2024-01-01', newCards: 0, streak: 1 },
     },

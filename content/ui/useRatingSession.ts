@@ -35,7 +35,7 @@ export function useRatingSession(openRequest: number) {
       await action();
       return true;
     } catch (error) {
-      console.error('LeetSRS rating panel action failed:', error);
+      console.error('NeetSRS rating panel action failed:', error);
       setError(failure);
       return false;
     } finally {

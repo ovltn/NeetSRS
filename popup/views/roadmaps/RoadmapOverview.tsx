@@ -9,10 +9,10 @@ import { Tooltip } from '@/popup/components/Tooltip';
 import { useI18n } from '@/popup/contexts/I18nContext';
 import { learningDocumentQueryOptions } from '@/popup/queries/learning-document';
 import { roadmapMetadataQueryOptions } from '@/popup/queries/roadmaps';
-import { useSettingsQuery } from '@/popup/queries/settings';
 import { buttonInteraction, compactOutlineButton } from '@/popup/styles';
-import { getLeetcodeProblemUrl } from '@/shared/leetcode-links';
+import { getProblemUrl } from '@/shared/problem-links';
 import { getNextRoadmapProblemId, type Roadmap, type RoadmapId, type RoadmapProgressSummary } from '@/shared/roadmap';
+import { SITE_DOMAIN } from '@/shared/site-domain';
 import { getProblemTitle } from '@/shared/ui/problem-title';
 import { useOpenRandomProblem } from './useOpenRandomProblem';
 
@@ -133,8 +133,7 @@ function RoadmapItem({ roadmap, onOpen }: { roadmap: RoadmapSummary; onOpen: () 
 function NextProblem({ roadmap }: { roadmap: Roadmap }) {
   const t = useI18n();
   const { data: document } = useSuspenseQuery(learningDocumentQueryOptions);
-  const { data: settings } = useSettingsQuery();
-  const domain = settings.preferredLeetcodeSite;
+  const domain = SITE_DOMAIN;
   const metadata = useQuery(roadmapMetadataQueryOptions(roadmap, domain));
   const nextId = getNextRoadmapProblemId(roadmap, document, metadata.data, domain);
   const next = nextId ? metadata.data?.[nextId] : undefined;
@@ -145,9 +144,9 @@ function NextProblem({ roadmap }: { roadmap: Roadmap }) {
     <div className="flex items-center gap-2 border-t border-current py-1 pl-3.5 pr-1.5 text-xs">
       <span className="shrink-0 text-tertiary">{t.roadmaps.next}</span>
       <ProblemLink
-        href={getLeetcodeProblemUrl({ domain, slug: next.slug })}
+        href={getProblemUrl({ domain, slug: next.slug })}
         frontendId={next.frontendId}
-        title={getProblemTitle(next, domain)}
+        title={getProblemTitle(next)}
       >
         <LuArrowUpRight aria-hidden="true" className="size-3 shrink-0 text-tertiary" strokeWidth={2} />
       </ProblemLink>

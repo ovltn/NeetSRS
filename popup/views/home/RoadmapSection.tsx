@@ -15,9 +15,8 @@ import {
   roadmapsQueryOptions,
   useSkipRoadmapProblemMutation,
 } from '@/popup/queries/roadmaps';
-import { useSettingsQuery } from '@/popup/queries/settings';
 import { buttonInteraction, compactGhostButton } from '@/popup/styles';
-import { getLeetcodeProblemUrl } from '@/shared/leetcode-links';
+import { getProblemUrl } from '@/shared/problem-links';
 import {
   getRecommendableRoadmapProblemIds,
   pickRandomRoadmapProblemId,
@@ -26,6 +25,7 @@ import {
   roadmapProblemIds,
   summarizeRoadmap,
 } from '@/shared/roadmap';
+import { SITE_DOMAIN } from '@/shared/site-domain';
 import { getProblemTitle } from '@/shared/ui/problem-title';
 
 export function RoadmapSection({ isQueueEmpty, onOpen }: { isQueueEmpty: boolean; onOpen: (id: RoadmapId) => void }) {
@@ -50,8 +50,7 @@ export function RoadmapSection({ isQueueEmpty, onOpen }: { isQueueEmpty: boolean
 function ActiveRoadmap({ roadmap, isHero, onOpen }: { roadmap: Roadmap; isHero: boolean; onOpen: () => void }) {
   const t = useI18n();
   const { data: document } = useSuspenseQuery(learningDocumentQueryOptions);
-  const { data: settings } = useSettingsQuery();
-  const domain = settings.preferredLeetcodeSite;
+  const domain = SITE_DOMAIN;
   const metadata = useQuery(roadmapMetadataQueryOptions(roadmap, domain));
   const skip = useSkipRoadmapProblemMutation();
   const summary = summarizeRoadmap(document, roadmapProblemIds(roadmap), document.roadmapSkips[roadmap.id]);
@@ -127,14 +126,14 @@ function ActiveRoadmap({ roadmap, isHero, onOpen }: { roadmap: Roadmap; isHero: 
                 className={`flex items-start gap-1 rounded-sm hover:text-accent ${buttonInteraction} ${
                   isHero ? 'text-stat leading-[22px] font-semibold' : 'text-body font-medium'
                 }`}
-                href={getLeetcodeProblemUrl({ domain, slug: next.slug })}
+                href={getProblemUrl({ domain, slug: next.slug })}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`${next.frontendId}. ${getProblemTitle(next, domain)}`}
+                aria-label={`${next.frontendId}. ${getProblemTitle(next)}`}
               >
                 <span className="min-w-0 break-words">
                   <span className="font-normal text-tertiary tabular-nums">{next.frontendId}.</span>{' '}
-                  {getProblemTitle(next, domain)}
+                  {getProblemTitle(next)}
                 </span>
                 {next.isPaidOnly && (
                   <LuLock
@@ -163,7 +162,7 @@ function ActiveRoadmap({ roadmap, isHero, onOpen }: { roadmap: Roadmap; isHero: 
               <SaveProblemButton
                 frontendId={next.frontendId}
                 domain={domain}
-                title={getProblemTitle(next, domain)}
+                title={getProblemTitle(next)}
                 isSaved={false}
                 variant={isHero ? 'primary' : 'card'}
                 isDisabled={skip.isPending}
@@ -175,7 +174,7 @@ function ActiveRoadmap({ roadmap, isHero, onOpen }: { roadmap: Roadmap; isHero: 
                   isHero ? 'h-9 px-3 rounded-lg border border-strong text-body' : 'size-8 rounded-md'
                 }`}
                 disabled={skip.isPending}
-                aria-label={t.roadmaps.skipProblem(getProblemTitle(next, domain))}
+                aria-label={t.roadmaps.skipProblem(getProblemTitle(next))}
                 title={isHero ? undefined : t.roadmaps.skip}
                 onClick={() => skip.mutate({ roadmapId: roadmap.id, frontendId: next.frontendId, skipped: true })}
               >

@@ -1,8 +1,6 @@
 import { useI18n } from '@/popup/contexts/I18nContext';
 import { useSettingsQuery, useUpdateSettingsMutation } from '@/popup/queries/settings';
-import type { LeetcodeDomain } from '@/shared/leetcode-domain';
 import type { Language, Theme } from '@/shared/settings';
-import { LeetcodeCnSection } from './LeetcodeCnSection';
 import { SettingsCard, SettingsSection } from './SettingsGroup';
 import { SettingsSelect } from './SettingsSelect';
 
@@ -33,16 +31,6 @@ export function GeneralSettingsSection() {
           value={settings.theme}
           onChange={(theme) => updateSettingsMutation.mutate({ theme })}
         />
-        <SettingsSelect<LeetcodeDomain>
-          label={t.settings.preferredLeetcodeSite}
-          options={[
-            { value: 'leetcode.com', label: 'leetcode.com' },
-            { value: 'leetcode.cn', label: 'leetcode.cn' },
-          ]}
-          value={settings.preferredLeetcodeSite}
-          onChange={(preferredLeetcodeSite) => updateSettingsMutation.mutate({ preferredLeetcodeSite })}
-        />
-        <LeetcodeCnSection />
       </SettingsCard>
     </SettingsSection>
   );

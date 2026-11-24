@@ -51,7 +51,7 @@ export function convertLearningDocument(input: unknown): LearningDocument {
 
   if (schemaVersion < 1) {
     for (const card of convertedCards) {
-      if (card.domain === undefined) card.domain = 'leetcode.com';
+      if (card.domain === undefined) card.domain = 'neetcode.io';
     }
   }
 

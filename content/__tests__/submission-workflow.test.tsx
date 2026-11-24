@@ -30,7 +30,7 @@ beforeEach(async () => {
   createServiceMock(background).reset().use(getRegisteredBackground());
   await background.waitForInitialization();
   window.history.replaceState({}, '', '/problems/two-sum/');
-  document.body.innerHTML = '<div id="ide-top-btns"><div id="last-group"></div></div>';
+  document.body.innerHTML = '<div class="editor-toolbar"><div id="last-group"></div></div>';
   ctx = new ContentScriptContext('test');
   await act(() => bootstrapContent(ctx));
   const extensionFetch = globalThis.fetch;
@@ -51,26 +51,25 @@ afterEach(() => {
   document.body.innerHTML = '';
 });
 
-async function request(path: string, body: unknown, method = 'GET') {
-  network.mockResolvedValueOnce(Response.json(body));
+async function submit() {
+  network.mockResolvedValueOnce(Response.json({ data: { status: { description: 'Accepted' } } }));
   await act(async () => {
-    await window.fetch(path, { method });
+    await window.fetch('/api/executeCodeFunctionHttp', {
+      method: 'POST',
+      body: JSON.stringify({ data: { problemId: 'two-sum', rawCode: 'pass', lang: 'python' } }),
+    });
     // The observer reads a cloned response without delaying the page's request.
     await new Promise((resolve) => setTimeout(resolve, 0));
   });
 }
-async function submit(id: number) {
-  await request('/problems/two-sum/submit/', { submission_id: id }, 'POST');
-  await request(`/submissions/detail/${id}/check/`, { state: 'SUCCESS', status_code: 10 });
-}
 function controls() {
-  const shadow = requireDefined(document.querySelector('leetsrs-control')?.shadowRoot);
+  const shadow = requireDefined(document.querySelector('neetsrs-control')?.shadowRoot);
   return within(shadow as unknown as HTMLElement);
 }
 
 it('opens one panel for an accepted submission, saves a review, and ignores duplicate notifications', async () => {
   const ui = controls();
-  await submit(1);
+  await submit();
   const good = await ui.findByRole('button', { name: 'Good' });
   await waitFor(() => expect(good).toBeEnabled());
   expect(ui.getAllByRole('dialog')).toHaveLength(1);
@@ -79,7 +78,6 @@ it('opens one panel for an accepted submission, saves a review, and ignores dupl
   expect((await readLearningDocument()).cards['1'].fsrs.reps).toBe(1);
   expect((await readLearningDocument()).reviewActivity?.newCards).toBe(1);
   fireEvent.keyDown(ui.getByRole('dialog'), { key: 'Escape' });
-  await request('/submissions/detail/1/check/', { state: 'SUCCESS', status_code: 10 });
   await act(async () =>
     window.postMessage(
       { type: ACCEPTED_SUBMISSION_MESSAGE, slug: 'two-sum', submissionId: '1' },
@@ -88,19 +86,19 @@ it('opens one panel for an accepted submission, saves a review, and ignores dupl
   );
   expect(ui.queryByRole('dialog')).not.toBeInTheDocument();
   expect((await readLearningDocument()).cards['1'].fsrs.reps).toBe(1);
-  await submit(2);
+  await submit();
   expect(await ui.findByRole('dialog')).toBeInTheDocument();
 });
 
 it('persists opt-out after solving while keeping manual rating available', async () => {
   const ui = controls();
-  await submit(1);
+  await submit();
   fireEvent.click(await ui.findByRole('button', { name: 'Turn off auto-open' }));
   await waitFor(async () => expect((await readLearningDocument()).settings.openRatingAfterSolving).toBe(false));
   fireEvent.keyDown(ui.getByRole('dialog'), { key: 'Escape' });
-  await submit(2);
+  await submit();
   expect(ui.queryByRole('dialog')).not.toBeInTheDocument();
-  fireEvent.click(ui.getByRole('button', { name: 'LeetSRS' }));
+  fireEvent.click(ui.getByRole('button', { name: 'NeetSRS' }));
   const good = await ui.findByRole('button', { name: 'Good' });
   await waitFor(() => expect(good).toBeEnabled());
   fireEvent.click(good);

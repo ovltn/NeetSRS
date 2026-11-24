@@ -1,6 +1,5 @@
 import { type CatalogProblem, getProblemsByFrontendIds } from '@/shared/catalog';
 import { type ProblemReference, readLearningDocument } from '@/shared/learning-document';
-import type { LeetcodeDomain } from '@/shared/leetcode-domain';
 import { buildReviewQueue } from '@/shared/review';
 import {
   getNextRoadmapProblemId,
@@ -9,8 +8,9 @@ import {
   roadmapProblemIds,
   summarizeRoadmap,
 } from '@/shared/roadmap';
+import type { SiteDomain } from '@/shared/site-domain';
 
-export type NextProblem = CatalogProblem & { domain: LeetcodeDomain };
+export type NextProblem = CatalogProblem & { domain: SiteDomain };
 interface NextReview {
   problem: NextProblem;
   due: number;

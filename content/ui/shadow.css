@@ -16,7 +16,7 @@
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 8px;
-  /* The design system's type scale on LeetCode. */
+  /* The design system's type scale on NeetCode. */
   --text-panel-title: 14px;
   --text-panel-title--line-height: 19px;
   --text-panel-title--letter-spacing: -0.01em;
@@ -82,4 +82,13 @@
 /* Ignores pointer activation briefly while the panel shrinks under the pointer after saving. */
 .pointer-guard a {
   pointer-events: none;
+}
+
+/* NeetCode's editor toolbar lays its icons out inline. WXT resets the host with !important,
+   which only a rule inside the shadow tree can override. */
+:host(#neetsrs-control) {
+  /* biome-ignore lint/complexity/noImportantStyles: WXT's host reset is !important. */
+  display: inline-block !important;
+  /* biome-ignore lint/complexity/noImportantStyles: WXT's host reset is !important. */
+  vertical-align: top !important;
 }

@@ -4,27 +4,30 @@ import { z } from 'zod';
 import type { Translations } from '@/shared/i18n/index';
 import { readLearningDocument } from '@/shared/learning-document';
 import { resolveLearningDocumentSettings } from '@/shared/settings';
-import { setupLeetcodeEditorReset } from './editor-reset';
+import { setupEditorReset } from './editor-reset';
 import { getCurrentProblemSlug } from './page-context';
 import { ACCEPTED_SUBMISSION_MESSAGE } from './submission-observer';
-import { LeetSrsControl } from './ui/LeetSrsControl';
+import { NeetSrsControl } from './ui/NeetSrsControl';
 import { createContentRoot } from './ui/shadow-root';
 import { LocalizedToast } from './ui/Toast';
 import './ui/shadow.css';
 
+// The icon row above NeetCode's code editor.
+const TOOLBAR_SELECTOR = '.editor-toolbar';
+
 export async function bootstrapContent(ctx: ContentScriptContext) {
   let disposeReset = () => {};
   ctx.onInvalidated(() => disposeReset());
-  await setupLeetSrsControl(ctx, () => {
+  await setupNeetSrsControl(ctx, () => {
     disposeReset();
-    disposeReset = setupLeetcodeEditorReset(() => {
+    disposeReset = setupEditorReset(() => {
       void showToast(ctx, (t) => t.contentScript.codeReset);
     });
   });
 }
 
 // Calls onProblemChange at startup and whenever navigation changes the problem.
-async function setupLeetSrsControl(ctx: ContentScriptContext, onProblemChange: () => void) {
+async function setupNeetSrsControl(ctx: ContentScriptContext, onProblemChange: () => void) {
   let root: ReturnType<typeof createContentRoot> | undefined;
   let slug: string | null | undefined;
   let request = 0;
@@ -37,13 +40,13 @@ async function setupLeetSrsControl(ctx: ContentScriptContext, onProblemChange: (
     submissionId: z.string().regex(/^\d+$/),
   });
   function renderControl(openRequest = 0) {
-    root?.render(<LeetSrsControl key={slug} openRequest={openRequest} />);
+    root?.render(<NeetSrsControl key={slug} openRequest={openRequest} />);
   }
   const ui = await createShadowRootUi(ctx, {
-    name: 'leetsrs-control',
+    name: 'neetsrs-control',
     position: 'inline',
-    anchor: '#ide-top-btns',
-    append: (toolbar, host) => toolbar.insertBefore(host, toolbar.lastElementChild),
+    anchor: TOOLBAR_SELECTOR,
+    append: (toolbar, host) => toolbar.prepend(host),
     onMount(container) {
       root = createContentRoot(container);
       renderControl(pendingOpen ? ++request : 0);
@@ -55,7 +58,7 @@ async function setupLeetSrsControl(ctx: ContentScriptContext, onProblemChange: (
       root = undefined;
     },
   });
-  ui.shadowHost.id = 'leetsrs-control';
+  ui.shadowHost.id = 'neetsrs-control';
   if (ctx.isInvalid) return;
 
   function mountControl() {
@@ -67,10 +70,11 @@ async function setupLeetSrsControl(ctx: ContentScriptContext, onProblemChange: (
       renderControl();
       onProblemChange();
     }
-    const toolbar = document.querySelector('#ide-top-btns');
+    const toolbar = document.querySelector(TOOLBAR_SELECTOR);
     if (toolbar && ui.mounted && ui.shadowHost.parentElement === toolbar) return;
     if (ui.mounted) ui.remove();
-    if (toolbar) ui.mount();
+    // NeetCode keeps the editor inert until Angular has rendered it; a node added earlier breaks that render.
+    if (toolbar && !toolbar.closest('[inert]')) ui.mount();
   }
 
   ctx.addEventListener(window, 'message', (event) => {
@@ -98,14 +102,14 @@ async function setupLeetSrsControl(ctx: ContentScriptContext, onProblemChange: (
   ctx.addEventListener(window, 'wxt:locationchange', mountControl);
   mountControl();
   const observer = new MutationObserver(mountControl);
-  observer.observe(document.body, { childList: true, subtree: true });
+  observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['inert'] });
   ctx.onInvalidated(() => observer.disconnect());
 }
 
 async function showToast(ctx: ContentScriptContext, message: (t: Translations) => string) {
   if (ctx.isInvalid) return;
   const ui = await createShadowRootUi(ctx, {
-    name: 'leetsrs-toast',
+    name: 'neetsrs-toast',
     position: 'inline',
     anchor: 'body',
     onMount(container) {

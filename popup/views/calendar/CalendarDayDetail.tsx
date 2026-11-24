@@ -15,7 +15,7 @@ import { buttonInteraction, compactOutlineButton, problemRow } from '@/popup/sty
 import type { CatalogProblem } from '@/shared/catalog';
 import { formatDue } from '@/shared/due';
 import type { Card } from '@/shared/learning-document';
-import { getLeetcodeProblemUrl } from '@/shared/leetcode-links';
+import { getProblemUrl } from '@/shared/problem-links';
 import type { ReviewCalendarDay } from '@/shared/review';
 import { getProblemTitle } from '@/shared/ui/problem-title';
 
@@ -141,7 +141,7 @@ function DayTitle({ date, today, language }: { date: CalendarDate; today: Calend
 
 function ProblemRow({ card, overdueSince, problem }: { card: Card; overdueSince: number; problem: CatalogProblem }) {
   const t = useI18n();
-  const title = getProblemTitle(problem, card.domain);
+  const title = getProblemTitle(problem);
   let marker: ReactNode;
   if (card.fsrs.due < overdueSince) {
     marker = (
@@ -156,7 +156,7 @@ function ProblemRow({ card, overdueSince, problem }: { card: Card; overdueSince:
       <div className="min-w-0 flex-1">
         <div className="flex min-w-0 items-center gap-1 text-body leading-[18px]">
           <ProblemLink
-            href={getLeetcodeProblemUrl({ domain: card.domain, slug: problem.slug })}
+            href={getProblemUrl({ domain: card.domain, slug: problem.slug })}
             frontendId={card.frontendId}
             title={title}
           >

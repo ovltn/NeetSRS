@@ -23,7 +23,7 @@ function request(
   body: unknown = { code: 'code', code_verifier: 'a'.repeat(43), redirect_uri: callback },
   headers: Record<string, string> = {}
 ) {
-  return new Request(`https://auth.leetsrs.com${path}`, {
+  return new Request(`https://auth.neetsrs.invalid${path}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'CF-Connecting-IP': '192.0.2.1', ...headers },
     body: JSON.stringify(body),
@@ -71,7 +71,7 @@ it('denies unrecognized origins and permits configured extension preflight', asy
   expect((await worker.fetch(request('/exchange', {}, { Origin: 'https://evil.example' }), env)).status).toBe(403);
   const origin = 'chrome-extension://aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
   const response = await worker.fetch(
-    new Request('https://auth.leetsrs.com/exchange', { method: 'OPTIONS', headers: { Origin: origin } }),
+    new Request('https://auth.neetsrs.invalid/exchange', { method: 'OPTIONS', headers: { Origin: origin } }),
     env
   );
   expect(response.status).toBe(204);
@@ -111,7 +111,7 @@ it.each(['/exchange', '/refresh'])('permits Firefox %s with its per-install orig
 });
 it('allows Firefox preflight only when a Firefox callback is configured', async () => {
   const preflight = () =>
-    new Request('https://auth.leetsrs.com/exchange', {
+    new Request('https://auth.neetsrs.invalid/exchange', {
       method: 'OPTIONS',
       headers: { Origin: firefoxOrigin },
     });

@@ -1,63 +1,42 @@
-<p align="center">
-  <img src="assets/promo/readme-banner.png" width="800" alt="LeetSRS — Spaced repetition for LeetCode. Know what to practice. And when to review." />
-</p>
+# NeetSRS
 
-LeetSRS helps you remember what you learn on LeetCode through spaced repetition. Available for Chrome and Firefox. Solve a problem, rate your recall, and review it when it's due. LeetSRS adjusts your review schedule based on your ratings. Follow a roadmap such as Blind 75 or NeetCode 150 for help choosing what to solve next. Your data stays local by default, with optional GitHub sync across devices. It's free and open source, and no LeetSRS account is required to get started.
+NeetSRS helps you remember what you learn on [NeetCode](https://neetcode.io) through spaced repetition. Solve a problem, rate your recall, and review it when it's due.
 
-<p align="center">
-  <a href="https://chromewebstore.google.com/detail/odgfcigkohoimpeeooifjdglncggkgko"><img src="assets/promo/add-to-chrome.png" width="212" height="58" alt="Add LeetSRS to Chrome" /></a>
-  &nbsp;
-  <a href="https://addons.mozilla.org/en-US/firefox/addon/leetsrs/"><img src="assets/promo/add-to-firefox.png" width="206" height="58" alt="Add LeetSRS to Firefox" /></a>
-</p>
+It is a fork of [LeetSRS](https://github.com/mattcdrake/LeetSRS) by Matt Drake, adapted from LeetCode to NeetCode. It is not published in a browser store; install it from source.
 
-<p align="center">
-  <img src="assets/promo/02-loop.png" width="800" alt="Solve on LeetCode, rate your recall in the LeetSRS panel, and review when it's due: rating Alien Dictionary Good schedules it for Saturday, October 17." />
-</p>
+## How it works
 
-## Get started
+1. **Solve a problem on neetcode.io.** When your submission is accepted, the NeetSRS panel opens from the editor toolbar.
+2. **Rate your recall.** Choose **Again**, **Hard**, **Good**, or **Easy**, or press 1–4. Each rating shows when the problem will come back.
+3. **Return for review.** Open the extension: **Home** shows problems that are due, **Calendar** shows the next four weeks, and **Roadmaps** follows Blind 75, NeetCode 150, NeetCode 250 or Grind 75.
 
-1. **Install LeetSRS** from the [Chrome Web Store](https://chromewebstore.google.com/detail/odgfcigkohoimpeeooifjdglncggkgko) or [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/leetsrs/) (Firefox 140 or newer).
-2. **Solve a problem.** Choose your own on LeetCode or follow a roadmap for suggestions.
-3. **Rate your recall.** When your submission is accepted, the LeetSRS panel opens on the problem page. Choose **Again**, **Hard**, **Good**, or **Easy**, or press 1–4, to schedule your next review. Each rating shows when the problem will come back.
-4. **Return for review.** Open LeetSRS: **Home** shows problems that are due, one at a time, and you can rate them right there. **Calendar** shows the next four weeks of reviews.
+NeetSRS schedules reviews with the [FSRS algorithm](https://github.com/open-spaced-repetition/ts-fsrs). Your data stays in the browser; export or import a backup from Settings.
 
-LeetSRS uses your ratings and review history with the [FSRS spaced repetition algorithm](https://github.com/open-spaced-repetition/ts-fsrs) to adjust your review schedule.
+## Differences from LeetSRS
 
-## Roadmaps
+- Runs on neetcode.io only. Problems keep their LeetCode numbers and use NeetCode's titles and links.
+- The catalog holds the 1,104 problems NeetCode hosts. Grind 75 lists 71 problems, because NeetCode does not host the other four.
+- GitHub Gist sync is hidden: it needs an OAuth app and sign-in server that NeetSRS does not have yet.
+- leetcode.cn support, the store rating prompt and the release announcement are removed.
 
-Choose **Blind 75**, **NeetCode 150**, **NeetCode 250**, or **Grind 75**. Track your progress and see your next suggested problem while previously rated problems stay in your review schedule. You can also add problems outside a roadmap.
+## Install from source
 
-Set a daily limit for new problems, pause individual problems, and track your streaks.
+```sh
+git clone https://github.com/ovltn/NeetSRS.git
+cd NeetSRS
+npm install
+npm run build
+```
 
-## Your data
+In Chrome, open `chrome://extensions`, turn on **Developer mode**, select **Load unpacked** and choose `.output/chrome-mv3`. For Firefox, run `npm run build:firefox` and load `.output/firefox-mv3` from `about:debugging`.
 
-Your practice data stays local by default. No LeetSRS account is required. Export a backup or import your data from Settings.
+## Problem data
 
-For optional sync across devices, connect GitHub and select a Gist in your own GitHub account. Signing in alone does not enable sync. New backups are secret Gists: anyone with the link can read them. See the [privacy policy](https://github.com/mattcdrake/LeetSRS/blob/main/PRIVACY.md) for details about storage and GitHub sign-in.
-
-<details>
-<summary>Set up GitHub sync</summary>
-
-1. In Settings, under **GitHub Gist sync**, select **Sign in with GitHub**.
-2. Choose an existing backup or **Create New Gist**, then select **Connect and sync**.
-3. Repeat on each browser, selecting the same backup. Credentials and the selected backup stay local to each installation.
-
-Turn off **Sync automatically** to pause syncing. **Sign out** removes the local connection and credentials while keeping your practice data and GitHub backups.
-
-Sync uses the entire dataset from the browser with the newest edit; it does not merge individual problems. Concurrent changes on another computer can be lost. Sync runs after local edits, when the extension starts, and at least once per minute for retry while enabled.
-
-</details>
+`node scripts/build-catalog.mjs` rebuilds `public/data/neetcode-catalog-v1.json` from the problem list in neetcode.io's site bundle and LeetSRS's catalog, and drops roadmap entries NeetCode does not host. Installed copies download the catalog from this repository's `main` branch when it changes.
 
 ## Development
 
-Use Node.js 24 or newer. Clone the repository and install dependencies:
-
-```sh
-git clone https://github.com/mattcdrake/LeetSRS.git
-cd LeetSRS
-npm install
-npm run dev
-```
+Use Node.js 24 or newer. After `npm install`, `npm run dev` starts Chrome with the extension loaded.
 
 | Command                  | Purpose                                                                                                                                          |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -74,14 +53,10 @@ npm run dev
 
 The persistent profile lives in `.wxt/chrome-data`, which Git ignores. Fresh runs leave it untouched.
 
-### Store releases
-
-The release workflow attaches Chrome, Firefox, and source ZIPs to [GitHub releases](https://github.com/mattcdrake/LeetSRS/releases). Publishing a GitHub release does not publish to either browser store: upload the Chrome ZIP to the Chrome Web Store and the Firefox ZIP, with its source archive, to [Mozilla’s Developer Hub](https://addons.mozilla.org/en-US/developers/addon/leetsrs/versions). Store versions may differ while updates await review.
-
 ## Contributing
 
-Bug reports, feedback, and contributions are welcome. [Open an issue](https://github.com/mattcdrake/LeetSRS/issues) or read the [contribution guidelines](https://github.com/mattcdrake/LeetSRS/blob/main/CONTRIBUTING.md) before opening a pull request.
+Bug reports, feedback, and contributions are welcome. [Open an issue](https://github.com/ovltn/NeetSRS/issues) or read the [contribution guidelines](https://github.com/ovltn/NeetSRS/blob/main/CONTRIBUTING.md) before opening a pull request.
 
 ## License
 
-[MIT](https://github.com/mattcdrake/LeetSRS/blob/main/LICENSE.md)
+[MIT](https://github.com/ovltn/NeetSRS/blob/main/LICENSE.md)

@@ -212,7 +212,7 @@ it('exports the current complete snapshot, preserving its timestamp and excludin
   await storage.setItems([
     { item: gistConnectionItem, value: { accountId: 1, gistId: 'local-gist', enabled: true } },
     { item: lastSyncTimeItem, value: 'previous-sync' },
-    { key: 'sync:leetsrs:theme', value: 'light' },
+    { key: 'sync:neetsrs:theme', value: 'light' },
   ]);
   await seedGithubAuthorization();
   onlineManager.setOnline(false);
@@ -232,7 +232,7 @@ it('exports the current complete snapshot, preserving its timestamp and excludin
   await waitFor(() => expect(createObjectURL).toHaveBeenCalledTimes(1));
   expect(JSON.parse(await backups[0].text())).toEqual(document);
   expect(backups[0].type).toBe('application/json');
-  expect(downloads).toEqual([{ href: 'blob:backup', filename: 'leetsrs-backup-2024-03-15.json' }]);
+  expect(downloads).toEqual([{ href: 'blob:backup', filename: 'neetsrs-backup-2024-03-15.json' }]);
   await waitFor(() => expect(screen.getByRole('button', { name: 'Export backup' })).toBeEnabled());
 
   const replacement = buildLearningDocument();

@@ -3,13 +3,13 @@
 import { act } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ContentScriptContext } from 'wxt/utils/content-script-context';
-import { setupLeetcodeEditorReset } from '@/content/editor-reset';
+import { setupEditorReset } from '@/content/editor-reset';
 import { watchDocumentTranslations } from '@/content/translations';
 import { translations } from '@/shared/i18n/index';
 import { requireDefined } from '@/test/utils/assertions';
 import { bootstrapContent } from '../bootstrap';
 
-vi.mock('@/content/editor-reset', () => ({ setupLeetcodeEditorReset: vi.fn() }));
+vi.mock('@/content/editor-reset', () => ({ setupEditorReset: vi.fn() }));
 vi.mock('@/content/translations', () => ({ watchDocumentTranslations: vi.fn() }));
 
 let ctx: ContentScriptContext;
@@ -34,12 +34,12 @@ beforeEach(() => {
       disconnect = disconnect;
     }
   );
-  document.body.innerHTML = '<div id="ide-top-btns"><div id="last-group"></div></div>';
+  document.body.innerHTML = '<div class="editor-toolbar"><div id="last-group"></div></div>';
   vi.mocked(watchDocumentTranslations).mockImplementation((onChange) => {
     onChange(translations.en);
     return unwatchTranslations;
   });
-  vi.mocked(setupLeetcodeEditorReset).mockReturnValue(disposeReset);
+  vi.mocked(setupEditorReset).mockReturnValue(disposeReset);
 });
 
 afterEach(() => {
@@ -52,26 +52,36 @@ afterEach(() => {
 });
 
 describe('content startup', () => {
+  it('waits until NeetCode has rendered the editor before adding the control', async () => {
+    document.body.innerHTML = '<div class="editor-toolbar-container" inert><div class="editor-toolbar"></div></div>';
+    await act(() => bootstrapContent(ctx));
+    expect(document.querySelector('#neetsrs-control')).toBeNull();
+
+    document.querySelector('.editor-toolbar-container')?.removeAttribute('inert');
+    act(() => notifyMutation());
+    expect(document.querySelectorAll('.editor-toolbar #neetsrs-control')).toHaveLength(1);
+  });
+
   it('checks whether to reset once per problem visit', async () => {
     history.replaceState({}, '', '/problemset/');
     await act(() => bootstrapContent(ctx));
-    vi.mocked(setupLeetcodeEditorReset).mockClear();
+    vi.mocked(setupEditorReset).mockClear();
     disposeReset.mockClear();
 
     history.pushState({}, '', '/problems/two-sum/description/');
     act(() => notifyMutation());
-    expect(setupLeetcodeEditorReset).toHaveBeenCalledTimes(1);
+    expect(setupEditorReset).toHaveBeenCalledTimes(1);
     expect(disposeReset).toHaveBeenCalledTimes(1);
 
     history.replaceState({}, '', '/problems/two-sum/');
     act(() => notifyMutation());
     act(() => notifyMutation());
-    expect(setupLeetcodeEditorReset).toHaveBeenCalledTimes(1);
+    expect(setupEditorReset).toHaveBeenCalledTimes(1);
     expect(disposeReset).toHaveBeenCalledTimes(1);
 
     history.pushState({}, '', '/problems/add-two-numbers/');
     act(() => notifyMutation());
-    expect(setupLeetcodeEditorReset).toHaveBeenCalledTimes(2);
+    expect(setupEditorReset).toHaveBeenCalledTimes(2);
     expect(disposeReset).toHaveBeenCalledTimes(2);
 
     act(() => ctx.notifyInvalidated());
@@ -81,37 +91,37 @@ describe('content startup', () => {
   it('mounts late and replaced toolbars without duplicates and unmounts when they disappear', async () => {
     document.body.innerHTML = '';
     await act(() => bootstrapContent(ctx));
-    expect(document.querySelector('#leetsrs-control')).toBeNull();
+    expect(document.querySelector('#neetsrs-control')).toBeNull();
 
-    document.body.innerHTML = '<div id="ide-top-btns"><div id="last-group"></div></div>';
+    document.body.innerHTML = '<div class="editor-toolbar"><div id="last-group"></div></div>';
     act(() => notifyMutation());
     act(() => notifyMutation());
 
-    expect(document.querySelectorAll('#leetsrs-control')).toHaveLength(1);
-    document.querySelector('#leetsrs-control')?.remove();
+    expect(document.querySelectorAll('#neetsrs-control')).toHaveLength(1);
+    document.querySelector('#neetsrs-control')?.remove();
     act(() => notifyMutation());
-    expect(document.querySelectorAll('#leetsrs-control')).toHaveLength(1);
+    expect(document.querySelectorAll('#neetsrs-control')).toHaveLength(1);
 
     unwatchTranslations.mockClear();
-    const oldToolbar = requireDefined(document.querySelector('#ide-top-btns'));
-    oldToolbar.removeAttribute('id');
-    document.body.insertAdjacentHTML('beforeend', '<div id="ide-top-btns"><div id="last-group"></div></div>');
+    const oldToolbar = requireDefined(document.querySelector('.editor-toolbar'));
+    oldToolbar.removeAttribute('class');
+    document.body.insertAdjacentHTML('beforeend', '<div class="editor-toolbar"><div id="last-group"></div></div>');
 
     act(() => notifyMutation());
     act(() => notifyMutation());
 
     expect(oldToolbar.isConnected).toBe(true);
-    expect(oldToolbar.querySelector('#leetsrs-control')).toBeNull();
-    expect(document.querySelectorAll('#leetsrs-control')).toHaveLength(1);
-    expect(document.querySelector('#ide-top-btns #leetsrs-control')).not.toBeNull();
+    expect(oldToolbar.querySelector('#neetsrs-control')).toBeNull();
+    expect(document.querySelectorAll('#neetsrs-control')).toHaveLength(1);
+    expect(document.querySelector('.editor-toolbar #neetsrs-control')).not.toBeNull();
     expect(unwatchTranslations).toHaveBeenCalledOnce();
 
-    const toolbar = requireDefined(document.querySelector('#ide-top-btns'));
+    const toolbar = requireDefined(document.querySelector('.editor-toolbar'));
     toolbar.remove();
 
     act(() => notifyMutation());
 
-    expect(toolbar.querySelector('#leetsrs-control')).toBeNull();
+    expect(toolbar.querySelector('#neetsrs-control')).toBeNull();
     expect(unwatchTranslations).toHaveBeenCalledTimes(2);
   });
 });

@@ -2,7 +2,7 @@ import { browser } from 'wxt/browser';
 import { z } from 'zod';
 import type { CatalogProblem } from '@/shared/catalog';
 import type { Card, LearningDocument } from '@/shared/learning-document';
-import type { LeetcodeDomain } from '@/shared/leetcode-domain';
+import type { SiteDomain } from '@/shared/site-domain';
 
 export const ROADMAP_IDS = ['blind-75', 'neetcode-150', 'neetcode-250', 'grind-75'] as const;
 export const roadmapIdSchema = z.enum(ROADMAP_IDS);
@@ -71,7 +71,7 @@ export function getRecommendableRoadmapProblemIds(
   roadmap: Roadmap,
   document: LearningDocument,
   metadata: Record<string, CatalogProblem | undefined> | undefined,
-  domain: LeetcodeDomain
+  domain: SiteDomain
 ): string[] {
   const skippedIds = new Set(document.roadmapSkips[roadmap.id]);
   return roadmapProblemIds(roadmap).filter(
@@ -83,7 +83,7 @@ export function getNextRoadmapProblemId(
   roadmap: Roadmap,
   document: LearningDocument,
   metadata: Record<string, CatalogProblem | undefined> | undefined,
-  domain: LeetcodeDomain,
+  domain: SiteDomain,
   currentId?: string
 ): string | undefined {
   return getRecommendableRoadmapProblemIds(roadmap, document, metadata, domain).find((id) => id !== currentId);

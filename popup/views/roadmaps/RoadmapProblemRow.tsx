@@ -9,9 +9,9 @@ import { buttonInteraction, menuItem, menuPopover, problemRow } from '@/popup/st
 import type { CatalogProblem } from '@/shared/catalog';
 import { formatDue } from '@/shared/due';
 import type { Card, ProblemReference } from '@/shared/learning-document';
-import type { LeetcodeDomain } from '@/shared/leetcode-domain';
-import { getLeetcodeProblemUrl } from '@/shared/leetcode-links';
+import { getProblemUrl } from '@/shared/problem-links';
 import { isReviewed } from '@/shared/roadmap';
+import type { SiteDomain } from '@/shared/site-domain';
 import { getProblemTitle } from '@/shared/ui/problem-title';
 
 export interface RoadmapProblem {
@@ -25,7 +25,7 @@ type ProblemState = 'notInSrs' | 'inSrs' | 'reviewed' | 'skipped';
 
 interface RoadmapProblemRowProps {
   problem: RoadmapProblem;
-  domain: LeetcodeDomain;
+  domain: SiteDomain;
   now: number;
   isNext: boolean;
   isSkipping: boolean;
@@ -50,7 +50,7 @@ export function RoadmapProblemRow({
 }: RoadmapProblemRowProps) {
   const t = useI18n();
   const { frontendId, metadata, card, skipped } = problem;
-  const title = metadata ? getProblemTitle(metadata, domain) : t.roadmaps.problem(frontendId);
+  const title = metadata ? getProblemTitle(metadata) : t.roadmaps.problem(frontendId);
   const available = !!metadata?.sources.includes(domain);
   let srsState: Exclude<ProblemState, 'skipped'> = 'notInSrs';
   if (card) srsState = isReviewed(card) ? 'reviewed' : 'inSrs';
@@ -74,11 +74,7 @@ export function RoadmapProblemRow({
         <div className={`flex min-w-0 items-center gap-1 text-body leading-[18px] ${skipped ? 'text-secondary' : ''}`}>
           <span className="sr-only">{t.roadmaps.filters[state]}</span>
           {metadata && available ? (
-            <ProblemLink
-              href={getLeetcodeProblemUrl({ domain, slug: metadata.slug })}
-              frontendId={frontendId}
-              title={title}
-            />
+            <ProblemLink href={getProblemUrl({ domain, slug: metadata.slug })} frontendId={frontendId} title={title} />
           ) : (
             // Unavailable problems cannot be reached in the real extension, so a native tooltip suffices.
             <span className="flex min-w-0 items-center gap-1" title={metadata ? `${frontendId}. ${title}` : title}>

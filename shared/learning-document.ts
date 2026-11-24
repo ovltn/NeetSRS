@@ -2,9 +2,9 @@ import { type CardInput, type Grade, Rating } from 'ts-fsrs';
 import { z } from 'zod';
 import { storage } from '#imports';
 import { background } from '@/shared/background-service';
-import { leetcodeDomainSchema } from '@/shared/leetcode-domain';
 import { roadmapIdSchema, roadmapSkipsSchema } from '@/shared/roadmap';
 import { settingsSchema } from '@/shared/settings';
+import { siteDomainSchema } from '@/shared/site-domain';
 
 export const ratingSchema = z.literal([Rating.Again, Rating.Hard, Rating.Good, Rating.Easy]) satisfies z.ZodType<Grade>;
 
@@ -21,7 +21,7 @@ const epochMilliseconds = z.number().min(-8.64e15).max(8.64e15);
 
 export const problemReferenceSchema = z.object({
   frontendId: nonemptyString,
-  domain: leetcodeDomainSchema,
+  domain: siteDomainSchema,
 });
 export type ProblemReference = z.infer<typeof problemReferenceSchema>;
 
@@ -108,7 +108,7 @@ export function findCard(document: LearningDocument, frontendId: string): Card |
 
 export type RatingPreview = Record<Grade, number>;
 
-export const learningDocumentItem = storage.defineItem<unknown>('local:leetsrs:learningDocument');
+export const learningDocumentItem = storage.defineItem<unknown>('local:neetsrs:learningDocument');
 
 let backgroundReadiness: Promise<void> | undefined;
 

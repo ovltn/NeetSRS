@@ -36,7 +36,7 @@ afterEach(() => vi.useRealTimers());
 
 it('refreshes the badge at midnight before an Again card’s timestamp without another save or sync tick', async () => {
   await browser.storage.local.set({
-    'leetsrs:learningDocument': { ...buildLearningDocument(), settings: { badgeEnabled: false } },
+    'neetsrs:learningDocument': { ...buildLearningDocument(), settings: { badgeEnabled: false } },
   });
   const fireAlarm = startBackground();
   await getRegisteredBackground().waitForInitialization();
@@ -127,9 +127,9 @@ describe('document startup through registered background commands', () => {
     { ...buildLearningDocument(), cards: 'corrupt' },
   ])('rejects a saved invalid document without falling back to legacy data: %j', async (document) => {
     await fakeBrowser.storage.local.set({
-      'leetsrs:learningDocument': document,
-      'leetsrs:cards': {},
-      'leetsrs:schemaVersion': 5,
+      'neetsrs:learningDocument': document,
+      'neetsrs:cards': {},
+      'neetsrs:schemaVersion': 5,
     });
     const before = await fakeBrowser.storage.local.get(null);
     const writes = vi.spyOn(fakeBrowser.storage.local, 'set');
@@ -166,13 +166,13 @@ it('starts OAuth from a permission-grant event without another popup command', a
 
 it('clears retired PAT credentials at startup and keeps the OAuth connection', async () => {
   const connection = { accountId: 1, gistId: 'gist', enabled: true };
-  await browser.storage.sync.set({ 'leetsrs:gistConnection': { pat: 'secret' }, 'leetsrs:githubPat': 'old' });
-  await browser.storage.local.set({ 'leetsrs:gistConnection': connection, 'leetsrs:oauthMigration': { notice: true } });
+  await browser.storage.sync.set({ 'neetsrs:gistConnection': { pat: 'secret' }, 'neetsrs:githubPat': 'old' });
+  await browser.storage.local.set({ 'neetsrs:gistConnection': connection, 'neetsrs:oauthMigration': { notice: true } });
   startBackground();
   await getRegisteredBackground().waitForInitialization();
   expect(await browser.storage.sync.get()).toEqual({});
-  expect(await browser.storage.local.get(['leetsrs:gistConnection', 'leetsrs:oauthMigration'])).toEqual({
-    'leetsrs:gistConnection': connection,
+  expect(await browser.storage.local.get(['neetsrs:gistConnection', 'neetsrs:oauthMigration'])).toEqual({
+    'neetsrs:gistConnection': connection,
   });
 });
 

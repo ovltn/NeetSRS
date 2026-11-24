@@ -80,11 +80,11 @@ describe('document learning through background commands', () => {
     await service.addCard(buildProblem());
     await service.saveNote('1', 'Keep my solution');
     const before = await readLearningDocument();
-    await service.addCard(buildProblem({ domain: 'leetcode.cn' }));
+    await service.addCard(buildProblem({ domain: 'neetcode.io' }));
     expect(await readLearningDocument()).toEqual(before);
-    await service.rateCard({ ...buildProblem({ domain: 'leetcode.cn' }), rating: Rating.Easy });
+    await service.rateCard({ ...buildProblem({ domain: 'neetcode.io' }), rating: Rating.Easy });
     expect((await readLearningDocument()).cards['1']).toMatchObject({
-      domain: 'leetcode.com',
+      domain: 'neetcode.io',
       createdAt: before.cards['1'].createdAt,
       note: 'Keep my solution',
     });
@@ -140,7 +140,7 @@ describe('document learning through background commands', () => {
     }
 
     const preview = await getRegisteredBackground().previewRatings(problem);
-    await getRegisteredBackground().rateCard({ ...problem, domain: 'leetcode.cn', rating });
+    await getRegisteredBackground().rateCard({ ...problem, domain: 'neetcode.io', rating });
     const saved = await readLearningDocument();
     const card = requireDefined(saved.cards[problem.frontendId]);
 

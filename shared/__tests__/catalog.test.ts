@@ -12,15 +12,15 @@ const twoSum: CatalogProblem = {
   difficulty: 'easy',
   isPaidOnly: false,
   topics: ['array', 'hash-table'],
-  sources: ['leetcode.com'],
+  sources: ['neetcode.io'],
 };
-const cnProblem: CatalogProblem = { ...twoSum, frontendId: '2', slug: 'cn-problem', sources: ['leetcode.cn'] };
+const oldProblem: CatalogProblem = { ...twoSum, frontendId: '2', slug: 'old-problem' };
 const newProblem: CatalogProblem = { ...twoSum, frontendId: '3', slug: 'new-problem' };
-const REMOTE = 'https://raw.githubusercontent.com/mattcdrake/LeetSRS/main/public/data/leetcode-catalog-v1';
+const REMOTE = 'https://raw.githubusercontent.com/ovltn/NeetSRS/main/public/data/neetcode-catalog-v1';
 
 async function fetchBundled(url: unknown) {
-  if (url === browser.runtime.getURL('/data/leetcode-catalog-v1.json')) {
-    return Response.json(Object.fromEntries([twoSum, cnProblem].map((problem) => [problem.frontendId, problem])));
+  if (url === browser.runtime.getURL('/data/neetcode-catalog-v1.json')) {
+    return Response.json(Object.fromEntries([twoSum, oldProblem].map((problem) => [problem.frontendId, problem])));
   }
   throw new Error(`Unexpected fetch: ${url}`);
 }
@@ -39,26 +39,23 @@ beforeEach(() => {
   vi.mocked(fetch).mockImplementation(fetchBundled);
 });
 
-it('returns mixed-domain and missing IDs in input order', async () => {
+it('returns known and missing IDs in input order', async () => {
   const { getProblemsByFrontendIds } = await import('@/shared/catalog');
   expect(
     await getProblemsByFrontendIds([
-      { frontendId: '2', domain: 'leetcode.cn' },
-      { frontendId: '1', domain: 'leetcode.cn' },
-      { frontendId: 'missing', domain: 'leetcode.com' },
-      { frontendId: '1', domain: 'leetcode.com' },
-      { frontendId: '2', domain: 'leetcode.com' },
-      { frontendId: 'constructor', domain: 'leetcode.com' },
+      { frontendId: '2', domain: 'neetcode.io' },
+      { frontendId: 'missing', domain: 'neetcode.io' },
+      { frontendId: '1', domain: 'neetcode.io' },
+      { frontendId: 'constructor', domain: 'neetcode.io' },
     ])
-  ).toEqual([cnProblem, undefined, undefined, twoSum, undefined, undefined]);
+  ).toEqual([oldProblem, undefined, twoSum, undefined]);
 });
 
-it('returns a slug match only for an available domain', async () => {
+it('returns a problem by its slug', async () => {
   const { getProblemBySlug } = await import('@/shared/catalog');
-  expect(await getProblemBySlug('two-sum', 'leetcode.com')).toEqual(twoSum);
-  expect(await getProblemBySlug('two-sum', 'leetcode.cn')).toBeUndefined();
-  expect(await getProblemBySlug('missing', 'leetcode.com')).toBeUndefined();
-  expect(await getProblemBySlug('constructor', 'leetcode.com')).toBeUndefined();
+  expect(await getProblemBySlug('two-sum', 'neetcode.io')).toEqual(twoSum);
+  expect(await getProblemBySlug('missing', 'neetcode.io')).toBeUndefined();
+  expect(await getProblemBySlug('constructor', 'neetcode.io')).toBeUndefined();
 });
 
 it.each(['id', 'slug'] as const)('surfaces %s catalog loading failures', async (field) => {
@@ -66,24 +63,24 @@ it.each(['id', 'slug'] as const)('surfaces %s catalog loading failures', async (
   const { getProblemBySlug, getProblemsByFrontendIds } = await import('@/shared/catalog');
   const result =
     field === 'slug'
-      ? getProblemBySlug('two-sum', 'leetcode.com')
-      : getProblemsByFrontendIds([{ frontendId: '1', domain: 'leetcode.com' }]);
+      ? getProblemBySlug('two-sum', 'neetcode.io')
+      : getProblemsByFrontendIds([{ frontendId: '1', domain: 'neetcode.io' }]);
   await expect(result).rejects.toThrow('Failed to load catalog JSON: 404');
 });
 
 it('switches to the published catalog for good once downloaded', async () => {
   const catalog = await import('@/shared/catalog');
-  expect(await catalog.getProblemBySlug('new-problem', 'leetcode.com')).toBeUndefined();
+  expect(await catalog.getProblemBySlug('new-problem', 'neetcode.io')).toBeUndefined();
   publish(JSON.stringify({ 1: twoSum, 3: newProblem }));
 
   await catalog.refreshCatalog();
 
-  expect(await catalog.getProblemsByFrontendIds([{ frontendId: '3', domain: 'leetcode.com' }])).toEqual([newProblem]);
-  expect(await catalog.getProblemBySlug('cn-problem', 'leetcode.cn')).toBeUndefined();
+  expect(await catalog.getProblemsByFrontendIds([{ frontendId: '3', domain: 'neetcode.io' }])).toEqual([newProblem]);
+  expect(await catalog.getProblemBySlug('old-problem', 'neetcode.io')).toBeUndefined();
   vi.resetModules();
   vi.mocked(fetch).mockRejectedValue(new Error('Offline'));
   const restarted = await import('@/shared/catalog');
-  expect(await restarted.getProblemBySlug('new-problem', 'leetcode.com')).toEqual(newProblem);
+  expect(await restarted.getProblemBySlug('new-problem', 'neetcode.io')).toEqual(newProblem);
 });
 
 it('downloads the catalog only when its published checksum changes', async () => {
@@ -105,7 +102,7 @@ it('retries a download that does not match its published checksum', async () => 
 
   await refreshCatalog();
 
-  expect(await getProblemBySlug('new-problem', 'leetcode.com')).toEqual(newProblem);
+  expect(await getProblemBySlug('new-problem', 'neetcode.io')).toEqual(newProblem);
 });
 
 it('keeps the current catalog when the published catalog is invalid', async () => {
@@ -114,5 +111,5 @@ it('keeps the current catalog when the published catalog is invalid', async () =
 
   await expect(refreshCatalog()).rejects.toThrow();
 
-  expect(await getProblemBySlug('two-sum', 'leetcode.com')).toEqual(twoSum);
+  expect(await getProblemBySlug('two-sum', 'neetcode.io')).toEqual(twoSum);
 });

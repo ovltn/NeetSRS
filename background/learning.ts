@@ -134,7 +134,7 @@ const undoSnapshotSchema = z.object({
   activity: z.object({ previous: reviewActivitySchema.nullable(), saved: reviewActivitySchema.nullable() }).nullable(),
 });
 type UndoSnapshot = z.infer<typeof undoSnapshotSchema>;
-const undoSnapshotItem = storage.defineItem<UndoSnapshot>('session:leetsrs:undoSnapshot');
+const undoSnapshotItem = storage.defineItem<UndoSnapshot>('session:neetsrs:undoSnapshot');
 
 const sameValue = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
 

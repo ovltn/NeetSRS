@@ -56,7 +56,7 @@ export function RatingMenu({ t, session }: { t: Translations; session: ReturnTyp
         setPreview(preview);
         setStatus(status);
       } catch (error) {
-        console.error('LeetSRS could not load the rating panel:', error);
+        console.error('NeetSRS could not load the rating panel:', error);
         if (active) setLoadFailed(true);
         return;
       }
@@ -64,7 +64,7 @@ export function RatingMenu({ t, session }: { t: Translations; session: ReturnTyp
         const showHint = await background.shouldShowAutoOpenHint();
         if (active) setHint(showHint);
       } catch (error) {
-        console.error('LeetSRS could not read the auto-open hint:', error);
+        console.error('NeetSRS could not read the auto-open hint:', error);
       }
     })();
     return () => {
@@ -75,7 +75,7 @@ export function RatingMenu({ t, session }: { t: Translations; session: ReturnTyp
   useEffect(() => {
     if (!hint || saved) return;
     void background.markAutoOpenHintShown().catch((error: unknown) => {
-      console.error('LeetSRS could not record the auto-open hint:', error);
+      console.error('NeetSRS could not record the auto-open hint:', error);
       setHint(false);
     });
   }, [hint, saved]);
@@ -180,15 +180,14 @@ export function RatingMenu({ t, session }: { t: Translations; session: ReturnTyp
             <div className="flex items-center gap-2">
               <div className="min-w-0 flex-1 text-panel-title font-semibold">{t.contentScript.howDidItGo}</div>
               <span className="rating-wordmark shrink-0 text-fg-3">
-                Leet<span className="text-brand">SRS</span>
+                Neet<span className="text-brand">SRS</span>
               </span>
             </div>
             <div className="mt-0.5 flex h-5 items-center gap-2">
               {problem && preview && !loadFailed ? (
                 <>
                   <div className="min-w-0 flex-1 truncate text-panel-meta text-fg-3">
-                    <span className="tabular-nums">{problem.frontendId}.</span>{' '}
-                    {getProblemTitle(problem, problem.domain)}
+                    <span className="tabular-nums">{problem.frontendId}.</span> {getProblemTitle(problem)}
                     {status && (
                       <>
                         {' · '}

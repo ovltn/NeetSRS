@@ -7,7 +7,7 @@ const zhCN: Translations = {
   youtubeSolution: '在 YouTube 观看 NeetCode 题解',
   topicLabel: (topic: string) => getTopicLabel(topic, 'zh-CN'),
   syncNotices: {
-    missingBackup: '此 Gist 不含 LeetSRS 备份。请在设置中选择其他 Gist。',
+    missingBackup: '此 Gist 不含 NeetSRS 备份。请在设置中选择其他 Gist。',
     creationFailed: 'GitHub 未返回已创建 Gist 的 ID。重试前请检查你的 Gist。',
     connectionSaveFailed: '无法保存连接。',
     unavailable: '你可以继续学习。GitHub 恢复可用后将自动继续同步。',
@@ -18,13 +18,13 @@ const zhCN: Translations = {
     unknown: '请稍后重试。',
   },
   app: {
-    name: 'LeetSRS',
-    namePart1: 'Leet',
+    name: 'NeetSRS',
+    namePart1: 'Neet',
     namePart2: 'SRS',
   },
 
   releaseAnnouncement: {
-    title: 'LeetSRS 1.0',
+    title: 'NeetSRS 1.0',
     eyebrow: '版本亮点',
     roadmapsTitle: '下一题，有方向',
     roadmapsDescription: '跟随 Blind 75、NeetCode 150/250 或 Grind 75 规划练习，用间隔重复持续复习。',
@@ -40,7 +40,7 @@ const zhCN: Translations = {
 
   ratingPrompt: {
     title: '连续一周，从未间断',
-    body: '坚持得很好。LeetSRS 由一名开发者独立打造，你的一条评价会很有帮助。',
+    body: '坚持得很好。NeetSRS 由一名开发者独立打造，你的一条评价会很有帮助。',
     rateOn: (store: string) => `在 ${store} 评分`,
     noThanks: '不用了',
     dismiss: '关闭',
@@ -191,15 +191,10 @@ const zhCN: Translations = {
     caughtUp: '全部复习完了',
     caughtUpDescription: '到期的复习会显示在这里。',
     freshTitle: '开始第一次复习',
-    freshDescription: '选择一条学习路线，LeetSRS 会每次给你一道题并安排复习。',
+    freshDescription: '选择一条学习路线，NeetSRS 会每次给你一道题并安排复习。',
     chooseRoadmap: '选择学习路线',
-    addProblemsInstructions: '在 LeetCode 上使用',
+    addProblemsInstructions: '在 NeetCode 上使用',
     addProblemsButton: '「提交」旁边的按钮添加题目。',
-    leetcodeCnBanner: {
-      message: '使用力扣中国站？启用支持以添加题目。',
-      enable: '启用',
-      dismiss: '关闭',
-    },
   },
 
   statsBar: {
@@ -238,12 +233,12 @@ const zhCN: Translations = {
     groups: { overdue: '已逾期', today: '今天', week: '未来 7 天', later: '以后', paused: '已暂停' },
     paused: '已暂停',
     hasNote: '有笔记',
-    openOnLeetcode: (title: string) => `在 LeetCode 上打开 ${title}`,
+    openOnSite: (title: string) => `在 NeetCode 上打开 ${title}`,
     solution: '题解',
     deleteCard: '删除卡片',
     loadingCards: '加载卡片中...',
     emptyTitle: '还没有卡片',
-    emptyDescription: '在首页、学习路线或 LeetCode 保存的题目会显示在这里。',
+    emptyDescription: '在首页、学习路线或 NeetCode 保存的题目会显示在这里。',
     browseRoadmaps: '浏览学习路线',
     noMatches: '没有匹配的卡片',
     noMatchesHint: '请尝试其他搜索词或筛选条件。',
@@ -290,12 +285,6 @@ const zhCN: Translations = {
       resetEditorOnReviewQueue: '到期时重置代码',
       hint: '到期题目从空白编辑器开始',
     },
-    preferredLeetcodeSite: '首选 LeetCode 站点',
-    leetcodeCn: {
-      label: 'leetcode.cn（力扣）支持',
-      hint: '需要额外的浏览器权限',
-      enable: '启用',
-    },
 
     data: {
       title: '数据与备份',
@@ -334,7 +323,7 @@ const zhCN: Translations = {
 
       title: 'GitHub Gist 同步',
       pitch: '将卡片备份到私有 Gist，并在各个浏览器间保持同步。',
-      gistDescription: 'LeetSRS 备份 - 间隔重复数据',
+      gistDescription: 'NeetSRS 备份 - 间隔重复数据',
       createNewGist: '创建新 Gist',
       syncEnabled: '自动同步',
       syncing: '同步中…',
@@ -354,7 +343,7 @@ const zhCN: Translations = {
             }).format(date),
       syncFailed: '同步失败',
       cancel: '取消',
-      syncDetails: 'LeetSRS 比较完整数据集的编辑时间，并用较新的数据替换较旧的数据。不会逐张卡片合并。',
+      syncDetails: 'NeetSRS 比较完整数据集的编辑时间，并用较新的数据替换较旧的数据。不会逐张卡片合并。',
       openGist: '打开备份 Gist',
       change: '更改',
       destination: '备份 Gist',
@@ -368,7 +357,7 @@ const zhCN: Translations = {
     about: {
       title: '关于',
       feedbackLink: '提交问题',
-      rateTitle: '喜欢 LeetSRS 吗？',
+      rateTitle: '喜欢 NeetSRS 吗？',
       rateBody: '评个分，帮更多人发现它。',
       rateCta: '评分',
       copyright: '© 2026 Matt Drake',

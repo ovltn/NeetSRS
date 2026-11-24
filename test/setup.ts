@@ -21,7 +21,7 @@ beforeEach(() => {
   vi.spyOn(browser.permissions.onAdded, 'addListener').mockImplementation(() => {});
   const fetchFromNetwork = globalThis.fetch;
   vi.spyOn(globalThis, 'fetch').mockImplementation(async (input, init) => {
-    if (input === browser.runtime.getURL('/data/leetcode-catalog-v1.json')) {
+    if (input === browser.runtime.getURL('/data/neetcode-catalog-v1.json')) {
       return Response.json(Object.fromEntries(testCatalog.map((problem) => [problem.frontendId, problem])));
     }
     return fetchFromNetwork(input, init);

@@ -7,12 +7,13 @@ import { resolveLearningDocumentSettings } from '@/shared/settings';
 const CONTROL_POLL_MS = 50;
 const CONTROL_TIMEOUT_MS = 10_000;
 const CONFIRM_TIMEOUT_MS = 2000;
-const RESET_ICON_SELECTOR = 'svg.fa-arrow-rotate-left, svg[data-icon="arrow-rotate-left"]';
-const CLICKABLE_SELECTOR = 'button, [role="button"]';
-const MODAL_SELECTOR = '[role="dialog"][aria-modal="true"], [role="alertdialog"]';
-const CONFIRM_LABELS = ['confirm', '确认', '确定'];
+// NeetCode's "Reset Code" toolbar button opens a dialog whose "Reset" button restores the starter code.
+// Its dialogs stay in the page while closed; an open one carries .dialog-open.
+const RESET_BUTTON_SELECTOR = 'button[data-tooltip="Reset Code"]';
+const MODAL_SELECTOR = '.modal.dialog-open';
+const CONFIRM_LABELS = ['reset'];
 
-export function setupLeetcodeEditorReset(onResetConfirmed: () => void): () => void {
+export function setupEditorReset(onResetConfirmed: () => void): () => void {
   const problemSlug = getCurrentProblemSlug();
   if (!problemSlug) return () => {};
 
@@ -108,11 +109,7 @@ export function setupLeetcodeEditorReset(onResetConfirmed: () => void): () => vo
 }
 
 function findResetButton(): HTMLElement | null {
-  for (const icon of document.querySelectorAll(RESET_ICON_SELECTOR)) {
-    const button = icon.closest(CLICKABLE_SELECTOR);
-    if (button instanceof HTMLElement) return button;
-  }
-  return null;
+  return document.querySelector<HTMLElement>(RESET_BUTTON_SELECTOR);
 }
 
 function findConfirmButton(openDialogs: Set<Element>): HTMLElement | null {

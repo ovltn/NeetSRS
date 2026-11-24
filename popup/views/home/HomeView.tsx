@@ -6,8 +6,7 @@ import { learningDocumentQueryOptions } from '@/popup/queries/learning-document'
 import { activeRoadmapQueryOptions } from '@/popup/queries/roadmaps';
 import { buttonInteraction, primaryButton } from '@/popup/styles';
 import type { RoadmapId } from '@/shared/roadmap';
-import { LeetSRSLogo } from '@/shared/ui/LeetSRSLogo';
-import { LeetcodeCnBanner } from '../../components/LeetcodeCnBanner';
+import { NeetSRSLogo } from '@/shared/ui/NeetSRSLogo';
 import { ViewLayout } from '../../components/ViewLayout';
 import { ReviewQueue } from './ReviewQueue';
 import { RoadmapSection } from './RoadmapSection';
@@ -19,7 +18,7 @@ function AddProblemsHint({ className = '' }: { className?: string }) {
     <p className={`text-xs leading-[18px] text-tertiary ${className}`}>
       {t.home.addProblemsInstructions}{' '}
       <span className="inline-grid place-items-center align-[-4px] size-[18px] rounded bg-secondary text-accent">
-        <LeetSRSLogo width="12" height="12" />
+        <NeetSRSLogo width="12" height="12" />
       </span>{' '}
       {t.home.addProblemsButton}
     </p>
@@ -31,7 +30,7 @@ function FreshStart({ onChooseRoadmap }: { onChooseRoadmap: () => void }) {
   return (
     <div className="min-h-[400px] flex flex-col justify-center px-2">
       <div className="size-11 rounded-xl bg-accent-soft text-accent grid place-items-center">
-        <LeetSRSLogo width="20" height="20" />
+        <NeetSRSLogo width="20" height="20" />
       </div>
       <h2 className="mt-4 text-hero font-semibold">{t.home.freshTitle}</h2>
       <p className="mt-1.5 text-body text-secondary">{t.home.freshDescription}</p>
@@ -54,7 +53,6 @@ export function HomeView({ onOpenRoadmap }: { onOpenRoadmap: (id: RoadmapId | nu
   const isFresh = activeRoadmapId === null && Object.keys(document.cards).length === 0;
   return (
     <ViewLayout headerContent={<StatsBar />}>
-      <LeetcodeCnBanner />
       <div className="flex flex-col gap-5">
         <ReviewQueue emptyContent={isFresh ? <FreshStart onChooseRoadmap={() => onOpenRoadmap(null)} /> : undefined} />
         <RoadmapSection isQueueEmpty={isQueueEmpty} onOpen={onOpenRoadmap} />

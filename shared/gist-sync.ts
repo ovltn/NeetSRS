@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import { storage } from '#imports';
 
-export const githubAuthorizationItem = storage.defineItem<unknown>('local:leetsrs:githubAuthorization');
-export const githubSetupPendingItem = storage.defineItem<boolean>('local:leetsrs:githubSetupPending', {
+export const githubAuthorizationItem = storage.defineItem<unknown>('local:neetsrs:githubAuthorization');
+export const githubSetupPendingItem = storage.defineItem<boolean>('local:neetsrs:githubSetupPending', {
   fallback: false,
 });
 
@@ -10,7 +10,7 @@ export const GITHUB_PERMISSIONS = {
   ...(import.meta.env.BROWSER === 'firefox'
     ? { data_collection: ['authenticationInfo', 'websiteActivity', 'websiteContent', 'technicalAndInteraction'] }
     : {}),
-  origins: ['https://auth.leetsrs.com/*', 'https://api.github.com/*', 'https://gist.githubusercontent.com/*'],
+  origins: ['https://auth.neetsrs.invalid/*', 'https://api.github.com/*', 'https://gist.githubusercontent.com/*'],
 };
 
 export interface GithubAuthStatus {
@@ -61,14 +61,14 @@ export interface GistSyncStatus {
   lastError: GistSyncErrorCode | null;
 }
 
-export const gistConnectionItem = storage.defineItem<GistSyncConfig>('local:leetsrs:gistConnection');
+export const gistConnectionItem = storage.defineItem<GistSyncConfig>('local:neetsrs:gistConnection');
 
 // Sync status is separate from the learning document and its edit timestamp.
-export const lastSyncTimeItem = storage.defineItem<string>('local:leetsrs:lastSyncTime');
+export const lastSyncTimeItem = storage.defineItem<string>('local:neetsrs:lastSyncTime');
 
 export function removeSyncStatus(): Promise<void> {
   // Clear the retired direction key during reset and sign-out.
-  return storage.removeItems([lastSyncTimeItem, 'local:leetsrs:lastSyncDirection']);
+  return storage.removeItems([lastSyncTimeItem, 'local:neetsrs:lastSyncDirection']);
 }
 
 export async function readGistConnection(): Promise<GistSyncConfig> {

@@ -1,7 +1,7 @@
 import { storage } from '#imports';
 import { readPopupDialogAcknowledgments, writePopupDialogAcknowledgments } from '@/shared/popup-dialogs';
 
-const ratingHintShownItem = storage.defineItem<boolean>('local:leetsrs:ratingHintShown', { fallback: false });
+const ratingHintShownItem = storage.defineItem<boolean>('local:neetsrs:ratingHintShown', { fallback: false });
 
 export async function acknowledgePopupDialog(id: string): Promise<void> {
   const acknowledgments = await readPopupDialogAcknowledgments();

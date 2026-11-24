@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { watchDocumentTranslations } from '@/content/translations';
 import type { Translations } from '@/shared/i18n/index';
-import { LeetSRSLogo } from '@/shared/ui/LeetSRSLogo';
+import { NeetSRSLogo } from '@/shared/ui/NeetSRSLogo';
 import { useSurfaceTheme } from './theme';
 
 const TOAST_DURATION_MS = 4000;
@@ -55,7 +55,7 @@ export function Toast({ message, onDismiss }: { message: string; onDismiss: () =
       onPointerEnter={() => setHovered(true)}
       onPointerLeave={() => setHovered(false)}
     >
-      <LeetSRSLogo className="size-4 shrink-0 text-brand" />
+      <NeetSRSLogo className="size-4 shrink-0 text-brand" />
       <span>{message}</span>
     </div>
   );

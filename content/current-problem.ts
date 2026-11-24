@@ -1,9 +1,9 @@
 import { getCurrentDomain, getCurrentProblemSlug } from '@/content/page-context';
 import { background } from '@/shared/background-service';
 import type { CatalogProblem } from '@/shared/catalog';
-import type { LeetcodeDomain } from '@/shared/leetcode-domain';
+import type { SiteDomain } from '@/shared/site-domain';
 
-export async function getCurrentProblem(): Promise<CatalogProblem & { domain: LeetcodeDomain }> {
+export async function getCurrentProblem(): Promise<CatalogProblem & { domain: SiteDomain }> {
   const slug = getCurrentProblemSlug();
   if (!slug) throw new Error('Expected a problem slug on the current page');
   const domain = getCurrentDomain();

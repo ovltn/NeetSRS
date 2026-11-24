@@ -5,7 +5,7 @@ import { background } from '@/shared/background-service';
 import { formatDue } from '@/shared/due';
 import type { Translations } from '@/shared/i18n';
 import type { ProblemReference } from '@/shared/learning-document';
-import { getLeetcodeProblemUrl } from '@/shared/leetcode-links';
+import { getProblemUrl } from '@/shared/problem-links';
 import type { RoadmapProgressSummary } from '@/shared/roadmap';
 import { getProblemTitle } from '@/shared/ui/problem-title';
 
@@ -126,7 +126,7 @@ function NextProblemRow({ t, problem: { frontendId, domain }, saved, kind }: Pro
   return (
     <a
       className="flex items-center gap-2.5 rounded-lg px-2 py-[7px] text-fg no-underline hover:bg-row-hover focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus"
-      href={getLeetcodeProblemUrl(problem)}
+      href={getProblemUrl(problem)}
       data-next={kind}
       aria-keyshortcuts={NEXT_SHORTCUTS[kind]}
     >
@@ -135,8 +135,7 @@ function NextProblemRow({ t, problem: { frontendId, domain }, saved, kind }: Pro
       </span>
       <span className="min-w-0 flex-1">
         <span className="line-clamp-2 text-panel-body font-medium wrap-anywhere">
-          <span className="text-fg-3 tabular-nums">{problem.frontendId}.</span>{' '}
-          {getProblemTitle(problem, problem.domain)}
+          <span className="text-fg-3 tabular-nums">{problem.frontendId}.</span> {getProblemTitle(problem)}
         </span>
         <span className="flex items-center gap-1 text-panel-meta text-fg-3">{meta}</span>
       </span>

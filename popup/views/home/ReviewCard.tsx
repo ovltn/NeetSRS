@@ -7,7 +7,7 @@ import { Difficulty } from '@/popup/components/Difficulty';
 import { type CardWithProblem, ratingPreviewQueryOptions } from '@/popup/queries/cards';
 import { buttonInteraction } from '@/popup/styles';
 import { ratingSchema } from '@/shared/learning-document';
-import { getLeetcodeProblemUrl } from '@/shared/leetcode-links';
+import { getProblemUrl } from '@/shared/problem-links';
 import { getProblemTitle } from '@/shared/ui/problem-title';
 import { RATING_COLORS } from '@/shared/ui/rating-colors';
 import { useI18n } from '../../contexts/I18nContext';
@@ -40,12 +40,12 @@ export function ReviewCard({ card, onRate, isProcessing = false, children }: Rev
           )}
         </div>
         <a
-          href={getLeetcodeProblemUrl(card)}
+          href={getProblemUrl(card)}
           target="_blank"
           rel="noopener noreferrer"
           className={`mt-1.5 flex items-start gap-1.5 text-stat leading-[22px] font-semibold text-primary hover:text-accent rounded-sm ${buttonInteraction}`}
         >
-          <span className="min-w-0 break-words">{getProblemTitle(card, card.domain)}</span>
+          <span className="min-w-0 break-words">{getProblemTitle(card)}</span>
           <LuArrowUpRight aria-hidden="true" className="size-3.5 mt-1 shrink-0 text-tertiary" strokeWidth={2} />
         </a>
         <div className="mt-4 grid grid-cols-4 gap-1.5">

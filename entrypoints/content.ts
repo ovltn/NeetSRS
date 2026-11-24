@@ -1,7 +1,7 @@
 import { bootstrapContent } from '@/content/bootstrap';
 
 export default defineContentScript({
-  matches: ['*://*.leetcode.com/*', '*://*.leetcode.cn/*'],
+  matches: ['*://neetcode.io/*'],
   runAt: 'document_idle',
   cssInjectionMode: 'ui',
   main: bootstrapContent,

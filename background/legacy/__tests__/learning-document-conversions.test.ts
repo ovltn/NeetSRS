@@ -19,7 +19,7 @@ it('converts an unversioned document through every schema version', () => {
       // v4: separate notes attach to cards without an embedded note.
       'two-sum': { ...legacyCard, id: 'a', leetcodeId: '1' },
       // v4: an embedded note, even an empty one, takes precedence over a separate note.
-      'cn-problem': { ...legacyCard, id: 'b', leetcodeId: '2', domain: 'leetcode.cn', note: '' },
+      'cn-problem': { ...legacyCard, id: 'b', leetcodeId: '2', domain: 'neetcode.io', note: '' },
       // v4: a card with an invalid separate note is discarded.
       'bad-note': { ...legacyCard, id: 'c', leetcodeId: '3' },
       // v10: cards are rekeyed by frontend ID; invalid cards are discarded.
@@ -49,8 +49,8 @@ it('converts an unversioned document through every schema version', () => {
   const expected = {
     schemaVersion: LEARNING_DOCUMENT_VERSION,
     cards: {
-      '1': { ...learning, frontendId: '1', domain: 'leetcode.com', note: 'Keep this note' },
-      '2': { ...learning, frontendId: '2', domain: 'leetcode.cn' },
+      '1': { ...learning, frontendId: '1', domain: 'neetcode.io', note: 'Keep this note' },
+      '2': { ...learning, frontendId: '2', domain: 'neetcode.io' },
     },
     reviewActivity: { date: '2024-01-15', newCards: 3, streak: 9 },
     settings: { theme: 'dark', language: 'en', resetEditorOnReviewQueue: true },

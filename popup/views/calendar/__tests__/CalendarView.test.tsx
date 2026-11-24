@@ -38,7 +38,7 @@ it('shows the selected day’s ordered problems, links, counts, and empty state'
   await openCalendar(
     buildLearningDocument({
       cards: {
-        '1': { ...card, domain: 'leetcode.cn', fsrs: { ...card.fsrs, due: new Date(2026, 8, 17, 15).getTime() } },
+        '1': { ...card, fsrs: { ...card.fsrs, due: new Date(2026, 8, 17, 15).getTime() } },
         '2': { ...card, frontendId: '2', fsrs: { ...card.fsrs, due: new Date(2026, 8, 16, 9).getTime() } },
         '3': { ...card, frontendId: '3', fsrs: { ...card.fsrs, due: new Date(2026, 8, 18, 12).getTime() } },
       },
@@ -49,8 +49,8 @@ it('shows the selected day’s ordered problems, links, counts, and empty state'
   const links = within(list).getAllByRole('link', { name: /^\d+\./ });
   expect(links).toHaveLength(2);
   expect(links[0]).toHaveAccessibleName('2. Add Two Numbers');
-  expect(links[1]).toHaveAccessibleName('1. 两数之和');
-  expect(links[1]).toHaveAttribute('href', 'https://leetcode.cn/problems/two-sum/description/');
+  expect(links[1]).toHaveAccessibleName('1. Two Sum');
+  expect(links[1]).toHaveAttribute('href', 'https://neetcode.io/problems/two-sum/question');
   expect(links[1]).toHaveAttribute('target', '_blank');
   expect(day('September 17, 2026')).toHaveAttribute('data-selected');
   expect(day('September 17, 2026')).toHaveAccessibleName(/2 due, 1 overdue$/);
@@ -63,7 +63,7 @@ it('shows the selected day’s ordered problems, links, counts, and empty state'
   fireEvent.click(day('September 18, 2026'));
   expect(await screen.findByRole('link', { name: /3\. Longest Substring/ })).toHaveAttribute(
     'href',
-    'https://leetcode.com/problems/longest-substring/description/'
+    'https://neetcode.io/problems/longest-substring/question'
   );
   expect(screen.getAllByRole('link', { name: /^\d+\./ })).toHaveLength(1);
   expect(day('September 18, 2026')).toHaveAccessibleName(/1 due$/);

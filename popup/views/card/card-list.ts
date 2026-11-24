@@ -55,9 +55,7 @@ export const filterAndSortCards = (
     .filter((card) => matchesCardFilters(card, filters, now))
     .filter(
       (card) =>
-        !filterText ||
-        getProblemTitle(card, card.domain).toLowerCase().includes(searchLower) ||
-        card.frontendId.includes(filterText)
+        !filterText || getProblemTitle(card).toLowerCase().includes(searchLower) || card.frontendId.includes(filterText)
     )
     .sort(comparators[sort]);
 };

@@ -21,7 +21,7 @@ export default defineConfig({
       ? {
           browser_specific_settings: {
             gecko: {
-              id: 'leetsrs@leetsrs.com',
+              id: 'neetsrs@ovltn.github.io',
               strict_min_version: '140.0',
               data_collection_permissions: {
                 required: ['none'],
@@ -30,10 +30,7 @@ export default defineConfig({
             },
           },
         }
-      : {
-          // Public Web Store key gives development and release builds the same ID.
-          key: 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyCs8P74QaC4RDxsBnZrDN2kmRVXiheAZlA+iKE3jYZ0y//nkx8VCwLtWukFWnz7/EJpzjuRTBKdl2eSMYtKGgaN1aF04HSSDqbWAiK5mOxmVbFqoHjdbutYAq2jnfF8rf6wILqTUbeCPa+ws2Yh3tf/XkUhAGeT4LPR+bllhbSefxM+npQW7Ntzu6Es+aWiInV9M9nUvwrRsVT9oqCIcPBaQ6uQ0zJAJtzUdMDNLkOz+4LvbHumNPrWyphKu6q3HbAYSMsKzRNylt8iW4TSijquIvvB8Zzapwt2TSoKKbj75jYNmvBfsHrHzXYhDtlgnKlV9Y4nCMWqzK4lbypJ50QIDAQAB',
-        }),
+      : {}),
     action: {
       default_popup: 'popup.html',
     },
@@ -41,10 +38,9 @@ export default defineConfig({
     description: '__MSG_extDescription__',
     default_locale: 'en',
     permissions: ['storage', 'alarms', 'activeTab', 'identity'],
-    host_permissions: ['*://*.leetcode.com/*'],
+    host_permissions: ['*://neetcode.io/*'],
     optional_host_permissions: [
-      '*://*.leetcode.cn/*',
-      'https://auth.leetsrs.com/*',
+      'https://auth.neetsrs.invalid/*',
       'https://api.github.com/*',
       'https://gist.githubusercontent.com/*',
     ],

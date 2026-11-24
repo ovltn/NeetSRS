@@ -35,7 +35,7 @@ beforeEach(async () => {
   const document = await readLearningDocument();
   github.get.mockResolvedValue({
     owner: { id: 1 },
-    files: { 'leetsrs-backup.json': { content: JSON.stringify(document) } },
+    files: { 'neetsrs-backup.json': { content: JSON.stringify(document) } },
   });
   github.list.mockResolvedValue([
     {
@@ -43,7 +43,7 @@ beforeEach(async () => {
       description: 'My backup',
       owner: { id: 1 },
       updated_at: '2026-09-15',
-      files: { 'leetsrs-backup.json': {} },
+      files: { 'neetsrs-backup.json': {} },
     },
   ]);
   github.create.mockResolvedValue({ id: 'created' });
@@ -91,7 +91,7 @@ it('connects an owned backup and pauses and resumes syncing through Settings', a
   fireEvent.click(screen.getByRole('switch'));
   await waitFor(() => expect(screen.getByRole('switch')).toBeChecked());
   await waitFor(() => expect(github.update).toHaveBeenCalled());
-  const uploaded = JSON.parse(github.update.mock.lastCall?.[1]['leetsrs-backup.json'].content);
+  const uploaded = JSON.parse(github.update.mock.lastCall?.[1]['neetsrs-backup.json'].content);
   expect(uploaded.cards['1'].note).toBe('Paused edit');
   expect(await readGistConnection()).toEqual({ accountId: 1, gistId: 'backup', enabled: true });
 });
@@ -117,9 +117,9 @@ it('cancels a destination change and retries creating a private backup without l
   expect(await readGistConnection()).toEqual({ accountId: 1, gistId: 'created', enabled: true });
   expect(github.create.mock.lastCall?.[0]).toMatchObject({
     public: false,
-    description: 'LeetSRS Backup - Spaced Repetition Data',
+    description: 'NeetSRS Backup - Spaced Repetition Data',
   });
-  expect(JSON.parse(github.create.mock.lastCall?.[0].files['leetsrs-backup.json'].content)).toEqual(before);
+  expect(JSON.parse(github.create.mock.lastCall?.[0].files['neetsrs-backup.json'].content)).toEqual(before);
 });
 
 it('signs out without deleting learning data or the remote backup', async () => {

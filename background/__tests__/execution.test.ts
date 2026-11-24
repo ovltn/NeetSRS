@@ -33,7 +33,7 @@ describe('registered background execution', () => {
     await getRegisteredBackground().updateSettings({ language: 'zh-CN' });
     await seedGithubAuthorization();
     await writeGistConnection(savedConnection);
-    await fakeBrowser.storage.local.set({ 'leetsrs:lastSyncTime': 'old', unrelated: 'keep' });
+    await fakeBrowser.storage.local.set({ 'neetsrs:lastSyncTime': 'old', unrelated: 'keep' });
     await fakeBrowser.storage.sync.set({ unrelated: 'keep' });
 
     await getRegisteredBackground().resetAllData();

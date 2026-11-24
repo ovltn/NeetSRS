@@ -11,7 +11,7 @@ interface ViewLayoutProps {
 }
 
 export function ViewLayout({
-  title = 'LeetSRS',
+  title = 'NeetSRS',
   headerLeading,
   headerContent,
   flush = false,

@@ -17,7 +17,7 @@ interface RatingOptionsProps {
   disabled: boolean;
   onSave: (rating?: Grade) => void;
   allowUnrated?: boolean;
-  // Compact rows show keyboard shortcuts for the LeetCode panel; comfortable rows suit the popup sheet.
+  // Compact rows show keyboard shortcuts for the NeetCode panel; comfortable rows suit the popup sheet.
   size?: 'compact' | 'comfortable';
   selected?: number;
 }

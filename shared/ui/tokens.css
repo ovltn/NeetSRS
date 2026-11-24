@@ -1,5 +1,5 @@
-/* LeetSRS design tokens for the popup and the LeetCode page. The popup sets data-theme on <html>.
-   LeetCode's theme comes from its classes rather than prefers-color-scheme, so each surface root
+/* NeetSRS design tokens for the popup and the NeetCode page. The popup sets data-theme on <html>.
+   NeetCode's theme comes from its classes rather than prefers-color-scheme, so each surface root
    on the page sets data-theme from useDarkMode(). */
 [data-theme="light"] {
   --ls-canvas: #fafafa;
@@ -41,7 +41,7 @@
   --ls-heat-4: color-mix(in srgb, var(--ls-brand) 92%, var(--ls-canvas));
   --ls-shadow-card: 0 1px 2px rgb(0 0 0 / 0.04), 0 2px 8px -2px rgb(0 0 0 / 0.06);
   --ls-shadow-float: 0 0 0 1px rgb(0 0 0 / 0.08), 0 12px 32px -8px rgb(0 0 0 / 0.22), 0 4px 10px -4px rgb(0 0 0 / 0.1);
-  /* The in-page button in LeetCode's toolbar. */
+  /* The in-page button in NeetCode's toolbar. */
   --ls-host-fill: rgba(0, 0, 0, 0.04);
   --ls-host-fill-hover: #e8e8e8;
   color-scheme: light;
@@ -84,7 +84,7 @@
   --ls-heat-3: color-mix(in srgb, var(--ls-brand) 48%, var(--ls-surface));
   --ls-heat-4: color-mix(in srgb, var(--ls-brand) 80%, var(--ls-surface));
   --ls-shadow-card: inset 0 1px 0 rgb(255 255 255 / 0.04);
-  /* Sets the panel apart from LeetCode's #262626 panels. */
+  /* Sets the panel apart from the site's dark panels. */
   --ls-shadow-float:
     0 0 0 1px rgb(255 255 255 / 0.1), 0 16px 40px -8px rgb(0 0 0 / 0.65), 0 4px 12px -4px rgb(0 0 0 / 0.45),
     inset 0 1px 0 rgb(255 255 255 / 0.05);

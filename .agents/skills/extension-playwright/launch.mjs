@@ -13,7 +13,7 @@ export async function launchExtension() {
   execSync('npx wxt build', { stdio: 'inherit' });
 
   const extensionPath = resolve('.output/chrome-mv3');
-  const profileDir = mkdtempSync(join(tmpdir(), 'leetsrs-playwright-'));
+  const profileDir = mkdtempSync(join(tmpdir(), 'neetsrs-playwright-'));
   const executablePath =
     !existsSync(chromium.executablePath()) && existsSync(PREINSTALLED_CHROMIUM) ? PREINSTALLED_CHROMIUM : undefined;
 

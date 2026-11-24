@@ -1,7 +1,7 @@
-import type { LeetcodeDomain } from '@/shared/leetcode-domain';
+import { SITE_DOMAIN, type SiteDomain } from '@/shared/site-domain';
 
-export function getCurrentDomain(): LeetcodeDomain {
-  return window.location.hostname.includes('leetcode.cn') ? 'leetcode.cn' : 'leetcode.com';
+export function getCurrentDomain(): SiteDomain {
+  return SITE_DOMAIN;
 }
 
 export function getCurrentProblemSlug(): string | null {

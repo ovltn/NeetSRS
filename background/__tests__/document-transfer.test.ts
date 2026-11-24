@@ -21,7 +21,7 @@ beforeEach(async () => {
   await getRegisteredBackground().resetAllData();
   await seedGithubAuthorization();
   await fakeBrowser.storage.local.set({
-    'leetsrs:gistConnection': { accountId: 1, gistId: 'gist', enabled: false },
+    'neetsrs:gistConnection': { accountId: 1, gistId: 'gist', enabled: false },
   });
 });
 

@@ -1,11 +1,8 @@
-import { LuArrowUpRight, LuStar } from 'react-icons/lu';
 import { buttonInteraction } from '@/popup/styles';
-import { CHROME_WEB_STORE_REVIEWS_URL } from '@/shared/rating-cta';
 import { useI18n } from '../../contexts/I18nContext';
-import { settingsCard } from './SettingsGroup';
 
 const APP_VERSION = __APP_VERSION__;
-const GITHUB_URL = 'https://github.com/mattcdrake/LeetSRS';
+const GITHUB_URL = 'https://github.com/ovltn/NeetSRS';
 
 export function AboutSection() {
   const t = useI18n();
@@ -16,24 +13,6 @@ export function AboutSection() {
 
   return (
     <section aria-label={t.settings.about.title}>
-      <a
-        href={CHROME_WEB_STORE_REVIEWS_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`${settingsCard} mb-4 flex items-center gap-3 p-3 hover:bg-[color-mix(in_srgb,var(--ls-raised)_50%,var(--ls-surface))] ${buttonInteraction}`}
-      >
-        <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-[color-mix(in_srgb,var(--ls-warning)_14%,var(--ls-surface))] text-[var(--ls-warning)]">
-          <LuStar aria-hidden="true" className="size-[18px] fill-current" />
-        </span>
-        <span className="min-w-0 flex-1">
-          <span className="block text-body font-semibold text-primary">{t.settings.about.rateTitle}</span>
-          <span className="block text-xs leading-4 text-secondary">{t.settings.about.rateBody}</span>
-        </span>
-        <span className="inline-flex h-7 shrink-0 items-center gap-1 rounded-md bg-accent px-2.5 text-xs font-medium text-on-accent">
-          {t.settings.about.rateCta}
-          <LuArrowUpRight aria-hidden="true" className="size-3.5" />
-        </span>
-      </a>
       <footer className="mb-2 flex flex-col items-center gap-2 text-xs text-tertiary">
         <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
           {links.map(({ href, label }) => (

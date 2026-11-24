@@ -1,5 +1,5 @@
 {
-  "name": "leetsrs",
+  "name": "neetsrs",
   "description": "A spaced repetition extension for LeetCode problems",
   "private": true,
   "version": "1.7.2",

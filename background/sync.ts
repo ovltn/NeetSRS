@@ -24,7 +24,7 @@ import { translations } from '@/shared/i18n/index';
 import { type LearningDocument, readLearningDocument, replaceLearningDocument } from '@/shared/learning-document';
 import { detectBrowserLanguage } from '@/shared/settings';
 
-const GIST_FILENAME = 'leetsrs-backup.json';
+const GIST_FILENAME = 'neetsrs-backup.json';
 
 let activeSync: Promise<void> | undefined;
 let connectionAbort = new AbortController();

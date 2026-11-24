@@ -5,7 +5,7 @@ import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { watchDocumentTranslations } from '@/content/translations';
 import { translations } from '@/shared/i18n/index';
 import { requireDefined } from '@/test/utils/assertions';
-import { LeetSrsControl } from '../LeetSrsControl';
+import { NeetSrsControl } from '../NeetSrsControl';
 import { createContentRoot } from '../shadow-root';
 
 vi.mock('@/content/translations', () => ({ watchDocumentTranslations: vi.fn() }));
@@ -24,7 +24,7 @@ beforeEach(() => {
   const container = document.createElement('div');
   shadow.append(container);
   root = createContentRoot(container);
-  act(() => root.render(<LeetSrsControl />));
+  act(() => root.render(<NeetSrsControl />));
 });
 afterEach(() => {
   act(() => root.unmount());
@@ -36,8 +36,8 @@ it('isolates the control and its menu, restores focus, and dismisses outside cli
   const shadow = requireDefined(host.shadowRoot);
   const control = requireDefined(shadow.querySelector<HTMLElement>('div'));
   const queries = within(control);
-  const button = queries.getByRole('button', { name: 'LeetSRS' });
-  expect(screen.queryByRole('button', { name: 'LeetSRS' })).not.toBeInTheDocument();
+  const button = queries.getByRole('button', { name: 'NeetSRS' });
+  expect(screen.queryByRole('button', { name: 'NeetSRS' })).not.toBeInTheDocument();
 
   act(() => button.focus());
   fireEvent.click(button);

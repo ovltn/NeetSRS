@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { storage } from '#imports';
 
-export const popupDialogAcknowledgmentsItem = storage.defineItem<unknown>('local:leetsrs:popupDialogAcknowledgments');
+export const popupDialogAcknowledgmentsItem = storage.defineItem<unknown>('local:neetsrs:popupDialogAcknowledgments');
 
 const popupDialogAcknowledgmentsSchema = z.record(z.string(), z.literal(true));
 export type PopupDialogAcknowledgments = z.infer<typeof popupDialogAcknowledgmentsSchema>;

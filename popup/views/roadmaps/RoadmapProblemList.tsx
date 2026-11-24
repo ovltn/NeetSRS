@@ -6,10 +6,9 @@ import { useI18n } from '@/popup/contexts/I18nContext';
 import { usePopupClock } from '@/popup/hooks/usePopupClock';
 import { learningDocumentQueryOptions } from '@/popup/queries/learning-document';
 import { roadmapMetadataQueryOptions, type useSkipRoadmapProblemMutation } from '@/popup/queries/roadmaps';
-import { useSettingsQuery } from '@/popup/queries/settings';
 import type { ProblemReference } from '@/shared/learning-document';
-import type { LeetcodeDomain } from '@/shared/leetcode-domain';
 import { getNextRoadmapProblemId, isReviewed } from '@/shared/roadmap';
+import { SITE_DOMAIN } from '@/shared/site-domain';
 import { getProblemTitle } from '@/shared/ui/problem-title';
 import { RoadmapGroup } from './RoadmapGroup';
 import type { RoadmapSummary } from './RoadmapOverview';
@@ -36,16 +35,14 @@ export function matchesFilter(
   }
 }
 
-function matchesSearch({ frontendId, metadata }: RoadmapProblem, query: string, domain: LeetcodeDomain): boolean {
+function matchesSearch({ frontendId, metadata }: RoadmapProblem, query: string): boolean {
   if (!query || frontendId.includes(query)) {
     return true;
   }
   if (!metadata) {
     return false;
   }
-  return (
-    metadata.title.toLowerCase().includes(query) || getProblemTitle(metadata, domain).toLowerCase().includes(query)
-  );
+  return getProblemTitle(metadata).toLowerCase().includes(query);
 }
 
 interface RoadmapProblemListProps {
@@ -73,8 +70,7 @@ export function RoadmapProblemList({
 }: RoadmapProblemListProps) {
   const t = useI18n();
   const { data: document } = useSuspenseQuery(learningDocumentQueryOptions);
-  const { data: settings } = useSettingsQuery();
-  const domain = settings.preferredLeetcodeSite;
+  const domain = SITE_DOMAIN;
   const metadata = useQuery(roadmapMetadataQueryOptions(roadmap, domain));
   const now = usePopupClock();
   const rating = useSaveProblem(onSaved);
@@ -106,7 +102,7 @@ export function RoadmapProblemList({
           skipped: skippedIds.has(frontendId),
         })
       )
-      .filter((problem) => matchesSearch(problem, query, domain) && matchesFilter(problem, filter)),
+      .filter((problem) => matchesSearch(problem, query) && matchesFilter(problem, filter)),
   }));
 
   // Groups stay mounted while nothing matches so they keep their expansion state.

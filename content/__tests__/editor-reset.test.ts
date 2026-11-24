@@ -9,18 +9,18 @@ import { requireDefined } from '@/test/utils/assertions';
 import { buildCatalogProblem, createMockCard } from '@/test/utils/card-mocks';
 import { buildLearningDocument } from '@/test/utils/learning-document-mocks';
 import { createServiceMock } from '@/test/utils/service-mocks';
-import { setupLeetcodeEditorReset } from '../editor-reset';
+import { setupEditorReset } from '../editor-reset';
 
 vi.mock('@/shared/background-service');
 
-function renderResetButton(markup = '<button><svg class="fa-arrow-rotate-left"></svg></button>'): HTMLElement {
+function renderResetButton(markup = '<button data-tooltip="Reset Code"></button>'): HTMLElement {
   const container = document.createElement('div');
   container.innerHTML = markup;
   document.body.appendChild(container);
   return requireDefined(container.querySelector<HTMLElement>('button, [role="button"]'));
 }
 
-function createDialog(labels = ['Cancel', 'Confirm'], attributes = 'role="dialog" aria-modal="true"') {
+function createDialog(labels = ['Cancel', 'Reset'], attributes = 'class="modal dialog-open"') {
   const container = document.createElement('div');
   container.innerHTML = `<div ${attributes}>${labels.map((label) => `<button>${label}</button>`).join('')}</div>`;
   const dialog = requireDefined(container.firstElementChild);
@@ -34,7 +34,7 @@ function attachDialog(resetButton: HTMLElement, dialog: Element, delayMs = 0): v
   });
 }
 
-describe('setupLeetcodeEditorReset', () => {
+describe('setupEditorReset', () => {
   let dispose: (() => void) | undefined;
   const onResetConfirmed = vi.fn();
 
@@ -78,7 +78,7 @@ describe('setupLeetcodeEditorReset', () => {
       const dialog = createDialog();
       attachDialog(resetButton, dialog.dialog);
 
-      dispose = setupLeetcodeEditorReset(onResetConfirmed);
+      dispose = setupEditorReset(onResetConfirmed);
       await vi.advanceTimersByTimeAsync(100);
       expect(resetClick).toHaveBeenCalledTimes(1);
       expect(dialog.clicks[1]).toHaveBeenCalledTimes(1);
@@ -118,24 +118,20 @@ describe('setupLeetcodeEditorReset', () => {
   ] as const)('preserves code when %s', async (_reason, document) => {
     await replaceLearningDocument(document);
     const resetClick = vi.spyOn(renderResetButton(), 'click');
-    dispose = setupLeetcodeEditorReset(onResetConfirmed);
+    dispose = setupEditorReset(onResetConfirmed);
     await vi.advanceTimersByTimeAsync(10_000);
     expect(resetClick).not.toHaveBeenCalled();
     expect(onResetConfirmed).not.toHaveBeenCalled();
     expect(vi.getTimerCount()).toBe(0);
   });
 
-  it.each([
-    '<button><svg class="fa-arrow-rotate-left"></svg></button>',
-    '<button><svg data-icon="arrow-rotate-left"></svg></button>',
-    '<div role="button"><span><svg class="fa-arrow-rotate-left"></svg></span></div>',
-  ])('waits for a supported reset control and confirms it once: %s', async (markup) => {
-    dispose = setupLeetcodeEditorReset(onResetConfirmed);
+  it('waits for the reset control and confirms it once', async () => {
+    dispose = setupEditorReset(onResetConfirmed);
     await vi.advanceTimersByTimeAsync(500);
 
-    const resetButton = renderResetButton(markup);
+    const resetButton = renderResetButton();
     const resetClick = vi.spyOn(resetButton, 'click');
-    const dialog = createDialog(['确定', 'Cancel'], 'role="alertdialog"');
+    const dialog = createDialog(['Reset', 'Cancel']);
     await vi.waitFor(() => expect(resetClick).toHaveBeenCalledOnce());
     expect(dialog.clicks[0]).not.toHaveBeenCalled();
     expect(onResetConfirmed).not.toHaveBeenCalled();
@@ -153,10 +149,10 @@ describe('setupLeetcodeEditorReset', () => {
     const resetButton = renderResetButton();
     const existing = createDialog();
     document.body.appendChild(existing.dialog);
-    const opened = createDialog(['Unknown', '  CoNfIrM  ']);
+    const opened = createDialog(['Unknown', '  ReSeT  ']);
     attachDialog(resetButton, opened.dialog);
 
-    dispose = setupLeetcodeEditorReset(onResetConfirmed);
+    dispose = setupEditorReset(onResetConfirmed);
     await vi.advanceTimersByTimeAsync(100);
 
     for (const click of existing.clicks) expect(click).not.toHaveBeenCalled();
@@ -169,7 +165,7 @@ describe('setupLeetcodeEditorReset', () => {
     const resetButton = renderResetButton();
     const dialog = createDialog();
     attachDialog(resetButton, dialog.dialog, 200);
-    dispose = setupLeetcodeEditorReset(onResetConfirmed);
+    dispose = setupEditorReset(onResetConfirmed);
     await vi.advanceTimersByTimeAsync(100);
 
     history.pushState({}, '', '/problemset/');
@@ -185,7 +181,7 @@ describe('setupLeetcodeEditorReset', () => {
     const resetClick = vi.spyOn(resetButton, 'click');
     const dialog = createDialog(['Abbrechen', 'Bestätigen']);
     attachDialog(resetButton, dialog.dialog);
-    dispose = setupLeetcodeEditorReset(onResetConfirmed);
+    dispose = setupEditorReset(onResetConfirmed);
 
     await vi.advanceTimersByTimeAsync(2000);
     expect(resetClick).toHaveBeenCalledTimes(1);

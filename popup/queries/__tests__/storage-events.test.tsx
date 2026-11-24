@@ -120,7 +120,7 @@ it('refreshes saved views after a content command and an alarm pull, including c
     settings: { maxNewCardsPerDay: 9 },
     dataUpdatedAt: '2099-01-01T00:00:00.000Z',
   });
-  github.get.mockResolvedValue({ files: { 'leetsrs-backup.json': { content: JSON.stringify(remote) } } });
+  github.get.mockResolvedValue({ files: { 'neetsrs-backup.json': { content: JSON.stringify(remote) } } });
   await act(() =>
     alarm({ name: 'gist-sync', scheduledTime: Date.now(), periodInMinutes: 1, persistAcrossSessions: true })
   );

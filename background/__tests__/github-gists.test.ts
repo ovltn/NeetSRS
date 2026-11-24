@@ -5,10 +5,10 @@ afterEach(() => vi.restoreAllMocks());
 
 it('sends authorized Gist updates and surfaces GitHub errors with their status', async () => {
   const fetch = vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(Response.json({ id: 'gist' }));
-  await gistsApi('token').update('gist', { 'leetsrs-backup.json': { content: '{}' } });
+  await gistsApi('token').update('gist', { 'neetsrs-backup.json': { content: '{}' } });
   expect(fetch).toHaveBeenCalledWith('https://api.github.com/gists/gist', {
     method: 'PATCH',
-    body: JSON.stringify({ files: { 'leetsrs-backup.json': { content: '{}' } } }),
+    body: JSON.stringify({ files: { 'neetsrs-backup.json': { content: '{}' } } }),
     headers: expect.objectContaining({ Authorization: 'Bearer token' }),
   });
 
