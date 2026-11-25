@@ -6,6 +6,11 @@
           "version": "0.1.1",
           "update_link": "https://github.com/ovltn/NeetSRS/releases/download/v0.1.1/neetsrs-0.1.1.xpi",
           "update_hash": "sha256:d178a373ad0cb4044d58354e034c288230c8ba26cb7daba38cf6c8eabf7e3a12"
+        },
+        {
+          "version": "0.2.0",
+          "update_link": "https://github.com/ovltn/NeetSRS/releases/download/v0.2.0/neetsrs-0.2.0.xpi",
+          "update_hash": "sha256:090b4e2cc66f7f9627675c6e9f81408b27ddd1dfc0a07def21ff653431439e99"
         }
       ]
     }
