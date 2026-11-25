@@ -7,6 +7,8 @@ import pkg from './package.json';
 export default defineConfig({
   modules: ['@wxt-dev/module-react'],
   manifestVersion: 3,
+  // Signed builds land here; Mozilla's source upload should not carry them.
+  zip: { excludeSources: ['web-ext-artifacts/**'] },
   webExt: {
     chromiumArgs:
       process.env.npm_lifecycle_event === 'dev:persistent' ? [`--user-data-dir=${resolve('.wxt/chrome-data')}`] : [],
@@ -17,6 +19,8 @@ export default defineConfig({
           browser_specific_settings: {
             gecko: {
               id: 'neetsrs@ovltn.github.io',
+              // Firefox polls this for new signed versions; .github/workflows/release-firefox.yml updates it.
+              update_url: 'https://raw.githubusercontent.com/ovltn/NeetSRS/main/updates.json',
               strict_min_version: '140.0',
               data_collection_permissions: {
                 required: ['none'],

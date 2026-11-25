@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.1 (2026-11-25)
+
+### Features
+
+- Firefox updates itself: releases are signed by Mozilla, published on GitHub, and listed in `updates.json`, which the add-on's manifest points to.
+
 ## 0.1.0 (2026-11-24)
 
 First NeetSRS release, forked from [LeetSRS 1.7.2](https://github.com/mattcdrake/LeetSRS/releases/tag/v1.7.2).

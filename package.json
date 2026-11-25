@@ -2,7 +2,7 @@
   "name": "neetsrs",
   "description": "A spaced repetition extension for NeetCode problems, forked from LeetSRS",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "author": "Matt Drake",
   "contributors": [
@@ -24,7 +24,7 @@
     "build:firefox": "wxt build -b firefox",
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
-    "lint:firefox": "web-ext lint --source-dir .output/firefox-mv3",
+    "lint:firefox": "web-ext lint --self-hosted --source-dir .output/firefox-mv3",
     "precompile": "node -e \"require('node:fs').existsSync('.wxt/tsconfig.json') || require('node:child_process').execSync('wxt prepare', { stdio: 'inherit' })\"",
     "compile": "tsc --noEmit",
     "format": "biome format --write .",

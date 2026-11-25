@@ -1,0 +1,75 @@
+name: Release Firefox
+
+# Run from the Actions tab (or `gh workflow run release-firefox.yml`) after bumping the version
+# in package.json on main. Signs the build with Mozilla (unlisted), attaches it to a GitHub
+# release, then lists it in updates.json so installed copies update themselves.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-firefox
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      WEB_EXT_API_KEY: ${{ secrets.WEB_EXT_API_KEY }}
+      WEB_EXT_API_SECRET: ${{ secrets.WEB_EXT_API_SECRET }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24.x
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Read the version, and refuse to release it twice
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if gh release view "v$VERSION" >/dev/null 2>&1; then
+            echo "::error::v$VERSION is already released. Bump the version in package.json first."
+            exit 1
+          fi
+          if [ -z "$WEB_EXT_API_KEY" ] || [ -z "$WEB_EXT_API_SECRET" ]; then
+            echo "::error::Set the WEB_EXT_API_KEY and WEB_EXT_API_SECRET repository secrets (from https://addons.mozilla.org/developers/addon/api/key/)."
+            exit 1
+          fi
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+
+      - name: Run checks
+        run: npm run check
+
+      - name: Package for Firefox
+        run: npm run zip:firefox
+
+      - name: Sign with Mozilla
+        run: |
+          npx web-ext sign --channel unlisted --source-dir .output/firefox-mv3 \
+            --upload-source-code ".output/neetsrs-$VERSION-sources.zip" --artifacts-dir web-ext-artifacts
+          mv web-ext-artifacts/*.xpi "neetsrs-$VERSION.xpi"
+
+      - name: Publish the GitHub release
+        run: |
+          gh release create "v$VERSION" "neetsrs-$VERSION.xpi" --target "$GITHUB_SHA" --title "NeetSRS $VERSION" \
+            --notes "Open neetsrs-$VERSION.xpi in Firefox to install. Installed copies update themselves. Changes: see CHANGELOG.md."
+
+      - name: List the release in updates.json
+        run: |
+          node scripts/add-firefox-update.mjs "neetsrs-$VERSION.xpi"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add updates.json
+          git commit -m "chore(release): list Firefox $VERSION in updates.json [skip ci]"
+          git pull --rebase origin main
+          git push origin HEAD:main

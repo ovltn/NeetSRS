@@ -2,7 +2,7 @@
 
 NeetSRS helps you remember what you learn on [NeetCode](https://neetcode.io) through spaced repetition. Solve a problem, rate your recall, and review it when it's due.
 
-It is a fork of [LeetSRS](https://github.com/mattcdrake/LeetSRS) by Matt Drake, adapted from LeetCode to NeetCode. It is not published in a browser store; install it from source.
+It is a fork of [LeetSRS](https://github.com/mattcdrake/LeetSRS) by Matt Drake, adapted from LeetCode to NeetCode. It is not listed in a browser store: Firefox installs it from this repository's releases, and Chrome from source.
 
 ## How it works
 
@@ -19,6 +19,10 @@ NeetSRS schedules reviews with the [FSRS algorithm](https://github.com/open-spac
 - GitHub Gist sync is hidden: it needs an OAuth app and sign-in server that NeetSRS does not have yet.
 - leetcode.cn support, the store rating prompt and the release announcement are removed.
 
+## Install in Firefox
+
+Open the `.xpi` attached to the [latest release](https://github.com/ovltn/NeetSRS/releases/latest) in Firefox 140 or newer. Mozilla signs each release without listing it in the add-on store, and Firefox checks [`updates.json`](updates.json) about once a day to install new releases by itself.
+
 ## Install from source
 
 ```sh
@@ -30,20 +34,14 @@ npm run build
 
 In Chrome, open `chrome://extensions`, turn on **Developer mode**, select **Load unpacked** and choose `.output/chrome-mv3`.
 
-In Firefox (140 or newer), run `npm run build:firefox`, open `about:debugging#/runtime/this-firefox`, select **Load Temporary Add-on** and choose `.output/firefox-mv3/manifest.json`. Firefox removes a temporary add-on when it restarts.
+In Firefox, run `npm run build:firefox`, open `about:debugging#/runtime/this-firefox`, select **Load Temporary Add-on** and choose `.output/firefox-mv3/manifest.json`. Firefox removes a temporary add-on when it restarts.
 
-### A permanent Firefox install
+## Releasing
 
-Release Firefox only keeps add-ons that Mozilla has signed. To sign your own copy without listing it publicly, create API credentials at <https://addons.mozilla.org/developers/addon/api/key/> and run:
+1. Bump the version: `npm version <x.y.z> --no-git-tag-version`, add a `CHANGELOG.md` entry, and push to `main`.
+2. Run the **Release Firefox** workflow from the Actions tab, or `gh workflow run release-firefox.yml`.
 
-```sh
-npm run zip:firefox
-npx web-ext sign --channel unlisted --source-dir .output/firefox-mv3 \
-  --upload-source-code .output/neetsrs-<version>-sources.zip \
-  --api-key "$WEB_EXT_API_KEY" --api-secret "$WEB_EXT_API_SECRET"
-```
-
-Open the signed `.xpi` it writes to `web-ext-artifacts/` in Firefox to install it.
+The workflow runs the checks, signs the Firefox build with Mozilla (unlisted channel), publishes it as release `v<x.y.z>`, and adds it to `updates.json`. It needs the repository secrets `WEB_EXT_API_KEY` and `WEB_EXT_API_SECRET`, the JWT issuer and secret from <https://addons.mozilla.org/developers/addon/api/key/>. Anyone holding them can publish a version that installed copies will accept, so keep them only in those secrets.
 
 ## Problem data
 
