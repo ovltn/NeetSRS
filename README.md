@@ -41,7 +41,7 @@ In Firefox, run `npm run build:firefox`, open `about:debugging#/runtime/this-fir
 1. Bump the version: `npm version <x.y.z> --no-git-tag-version`, add a `CHANGELOG.md` entry, and push to `main`.
 2. Run the **Release Firefox** workflow from the Actions tab, or `gh workflow run release-firefox.yml`.
 
-The workflow runs the checks, signs the Firefox build with Mozilla (unlisted channel), publishes it as release `v<x.y.z>`, and adds it to `updates.json`. It needs the repository secrets `WEB_EXT_API_KEY` and `WEB_EXT_API_SECRET`, the JWT issuer and secret from <https://addons.mozilla.org/developers/addon/api/key/>. Anyone holding them can publish a version that installed copies will accept, so keep them only in those secrets.
+The workflow runs the checks, signs the Firefox build with Mozilla (unlisted channel), publishes it as release `v<x.y.z>`, and adds it to `updates.json`. It needs the repository secrets `WEB_EXT_API_KEY` and `WEB_EXT_API_SECRET`, the JWT issuer and secret from <https://addons.mozilla.org/developers/addon/api/key/>. Mozilla usually signs within minutes; if it takes longer than the hour the workflow waits, run the workflow again later and it picks up the signed file. If Mozilla rejects a version, the workflow says so: fix the cause and release a new version. Anyone holding them can publish a version that installed copies will accept, so keep them only in those secrets.
 
 ## Problem data
 
