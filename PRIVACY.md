@@ -6,7 +6,7 @@ Your learning data—cards, notes, review activity, and settings—stays on your
 
 NeetSRS follows the Chrome Web Store Limited Use requirements. We do not sell your data, use it for advertising, or transfer it for purposes unrelated to NeetSRS. The extension does not collect analytics, crash reports, or other telemetry.
 
-The extension downloads the problem catalog from the NeetSRS repository on GitHub when the catalog changes. It makes no other network requests unless you turn on GitHub sync.
+The extension downloads the problem catalog from the NeetSRS repository on GitHub when the catalog changes. It makes no other network requests unless you sign in with GitHub.
 
 ## Optional GitHub sync
 

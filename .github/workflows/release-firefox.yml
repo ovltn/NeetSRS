@@ -50,6 +50,11 @@ jobs:
             echo "::error::Set the NEETSRS_GITHUB_CLIENT_ID repository variable to the GitHub OAuth App's client ID; without it the release has no GitHub sync."
             exit 1
           fi
+          WORKER_CLIENT_ID=$(node -p "require('fs').readFileSync('backend/wrangler.jsonc', 'utf8').match(/\"GITHUB_CLIENT_ID\":\\s*\"([^\"]+)\"/)[1]")
+          if [ "$WXT_GITHUB_CLIENT_ID" != "$WORKER_CLIENT_ID" ]; then
+            echo "::error::NEETSRS_GITHUB_CLIENT_ID ($WXT_GITHUB_CLIENT_ID) differs from GITHUB_CLIENT_ID in backend/wrangler.jsonc ($WORKER_CLIENT_ID); every sign-in would fail."
+            exit 1
+          fi
           echo "VERSION=$VERSION" >> "$GITHUB_ENV"
 
       - name: Run checks
