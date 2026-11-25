@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { storage } from '#imports';
+import { GITHUB_AUTH_ORIGIN } from './github-auth-origin';
 
 export const githubAuthorizationItem = storage.defineItem<unknown>('local:neetsrs:githubAuthorization');
 export const githubSetupPendingItem = storage.defineItem<boolean>('local:neetsrs:githubSetupPending', {
@@ -10,7 +11,7 @@ export const GITHUB_PERMISSIONS = {
   ...(import.meta.env.BROWSER === 'firefox'
     ? { data_collection: ['authenticationInfo', 'websiteActivity', 'websiteContent', 'technicalAndInteraction'] }
     : {}),
-  origins: ['https://auth.neetsrs.invalid/*', 'https://api.github.com/*', 'https://gist.githubusercontent.com/*'],
+  origins: [`${GITHUB_AUTH_ORIGIN}/*`, 'https://api.github.com/*', 'https://gist.githubusercontent.com/*'],
 };
 
 export interface GithubAuthStatus {

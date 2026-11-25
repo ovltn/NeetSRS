@@ -2,6 +2,7 @@ import { resolve } from 'node:path';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'wxt';
 import pkg from './package.json';
+import { GITHUB_AUTH_ORIGIN } from './shared/github-auth-origin';
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
@@ -39,7 +40,7 @@ export default defineConfig({
     permissions: ['storage', 'alarms', 'activeTab', 'identity'],
     host_permissions: ['*://neetcode.io/*'],
     optional_host_permissions: [
-      'https://auth.neetsrs.invalid/*',
+      `${GITHUB_AUTH_ORIGIN}/*`,
       'https://api.github.com/*',
       'https://gist.githubusercontent.com/*',
     ],

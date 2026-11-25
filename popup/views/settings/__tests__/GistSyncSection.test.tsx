@@ -58,7 +58,11 @@ it.each([false, true])(
       ...(import.meta.env.BROWSER === 'firefox'
         ? { data_collection: ['authenticationInfo', 'websiteActivity', 'websiteContent', 'technicalAndInteraction'] }
         : {}),
-      origins: ['https://auth.neetsrs.invalid/*', 'https://api.github.com/*', 'https://gist.githubusercontent.com/*'],
+      origins: [
+        'https://neetsrs-auth.neetsrs.workers.dev/*',
+        'https://api.github.com/*',
+        'https://gist.githubusercontent.com/*',
+      ],
     });
     expect(background.startGithubSignIn).toHaveBeenCalledOnce();
     vi.mocked(browser.permissions.contains).mockImplementation(async () => true);

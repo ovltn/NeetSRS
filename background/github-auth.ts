@@ -7,6 +7,7 @@ import {
   githubAuthorizationItem,
   githubSetupPendingItem,
 } from '@/shared/gist-sync';
+import { GITHUB_AUTH_ORIGIN } from '@/shared/github-auth-origin';
 import { githubTokenSchema } from '@/shared/github-token';
 
 export class GithubAuthorizationError extends Error {
@@ -17,8 +18,6 @@ const signInRequestItem = storage.defineItem<unknown>('session:neetsrs:githubSig
 const SIGN_IN_REQUEST_TTL = 5 * 60 * 1000;
 let signInRequests = Promise.resolve();
 
-// Placeholder: NeetSRS has no sign-in server yet, and .invalid never resolves.
-const AUTH_ORIGIN = 'https://auth.neetsrs.invalid';
 const accountSchema = z.object({ id: z.number().int().positive(), login: z.string().min(1) });
 const authorizationSchema = z.object({
   account: accountSchema,
@@ -63,7 +62,7 @@ function base64url(bytes: Uint8Array): string {
 class RejectedAuthorizationError extends GithubAuthorizationError {}
 
 async function requestTokens(path: 'exchange' | 'refresh', payload: Record<string, string>) {
-  const response = await fetch(`${AUTH_ORIGIN}/${path}`, {
+  const response = await fetch(`${GITHUB_AUTH_ORIGIN}/${path}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),

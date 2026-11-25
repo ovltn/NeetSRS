@@ -58,7 +58,7 @@ it.each([callback, 'https://fec292f403871813f2c7a41024e0a452037396d7.extensions.
     expect(url.searchParams.get('code_challenge_method')).toBe('S256');
     expect(fetch).toHaveBeenNthCalledWith(
       1,
-      'https://auth.neetsrs.invalid/exchange',
+      'https://neetsrs-auth.neetsrs.workers.dev/exchange',
       expect.objectContaining({ method: 'POST' })
     );
     const payload = JSON.parse(String(vi.mocked(fetch).mock.calls[0][1]?.body));
@@ -123,7 +123,7 @@ it('shares concurrent refreshes and persists rotated credentials before returnin
   expect(fetch).toHaveBeenCalledOnce();
   expect(fetch).toHaveBeenNthCalledWith(
     1,
-    'https://auth.neetsrs.invalid/refresh',
+    'https://neetsrs-auth.neetsrs.workers.dev/refresh',
     expect.objectContaining({ method: 'POST' })
   );
   expect(JSON.parse(String(vi.mocked(fetch).mock.calls[0][1]?.body))).toEqual({ refresh_token: saved?.refreshToken });
