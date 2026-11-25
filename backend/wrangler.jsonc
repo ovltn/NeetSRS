@@ -3,13 +3,12 @@
   "name": "neetsrs-auth",
   "main": "worker.ts",
   "compatibility_date": "2026-09-15",
-  "workers_dev": false,
+  "workers_dev": true,
   "preview_urls": false,
-  "routes": [{ "pattern": "auth.neetsrs.invalid", "custom_domain": true }],
   "observability": { "enabled": false },
   "vars": {
-    "GITHUB_CLIENT_ID": "Ov23liipyHCsyLrx9Aaf",
-    "ALLOWED_CALLBACKS": "https://odgfcigkohoimpeeooifjdglncggkgko.chromiumapp.org/,https://fec292f403871813f2c7a41024e0a452037396d7.extensions.allizom.org/"
+    "GITHUB_CLIENT_ID": "Ov23liajstGLo36zgWJW",
+    "ALLOWED_CALLBACKS": "https://133f2c0640d73c08bbab7e146e8800ef9541f110.extensions.allizom.org/"
   },
   "ratelimits": [
     {
