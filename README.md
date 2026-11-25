@@ -10,13 +10,13 @@ It is a fork of [LeetSRS](https://github.com/mattcdrake/LeetSRS) by Matt Drake, 
 2. **Rate your recall.** Choose **Again**, **Hard**, **Good**, or **Easy**, or press 1–4. Each rating shows when the problem will come back.
 3. **Return for review.** Open the extension: **Home** shows problems that are due, **Calendar** shows the next four weeks, and **Roadmaps** follows Blind 75, NeetCode 150, NeetCode 250 or Grind 75.
 
-NeetSRS schedules reviews with the [FSRS algorithm](https://github.com/open-spaced-repetition/ts-fsrs). Your data stays in the browser; export or import a backup from Settings.
+NeetSRS schedules reviews with the [FSRS algorithm](https://github.com/open-spaced-repetition/ts-fsrs). Your data stays in the browser; export or import a backup from Settings, or in Firefox sign in with GitHub to sync it through a secret Gist.
 
 ## Differences from LeetSRS
 
 - Runs on neetcode.io only. Problems keep their LeetCode numbers and use NeetCode's titles and links.
 - The catalog holds the 1,104 problems NeetCode hosts. Grind 75 lists 71 problems, because NeetCode does not host the other four.
-- GitHub Gist sync is hidden: it needs an OAuth app and sign-in server that NeetSRS does not have yet.
+- GitHub Gist sync works in Firefox only, through NeetSRS's own sign-in server. Chrome builds from source have no fixed sign-in address.
 - leetcode.cn support, the store rating prompt and the release announcement are removed.
 
 ## Install in Firefox
@@ -41,7 +41,16 @@ In Firefox, run `npm run build:firefox`, open `about:debugging#/runtime/this-fir
 1. Bump the version: `npm version <x.y.z> --no-git-tag-version`, add a `CHANGELOG.md` entry, and push to `main`.
 2. Run the **Release Firefox** workflow from the Actions tab, or `gh workflow run release-firefox.yml`.
 
-The workflow runs the checks, signs the Firefox build with Mozilla (unlisted channel), publishes it as release `v<x.y.z>`, and adds it to `updates.json`. It needs the repository secrets `WEB_EXT_API_KEY` and `WEB_EXT_API_SECRET`, the JWT issuer and secret from <https://addons.mozilla.org/developers/addon/api/key/>. Mozilla usually signs within minutes; if it takes longer than the hour the workflow waits, run the workflow again later and it picks up the signed file. If Mozilla rejects a version, the workflow says so: fix the cause and release a new version. Anyone holding them can publish a version that installed copies will accept, so keep them only in those secrets.
+The workflow runs the checks, signs the Firefox build with Mozilla (unlisted channel), publishes it as release `v<x.y.z>`, and adds it to `updates.json`. It needs the repository secrets `WEB_EXT_API_KEY` and `WEB_EXT_API_SECRET`, the JWT issuer and secret from <https://addons.mozilla.org/developers/addon/api/key/>. Mozilla usually signs within minutes; if it takes longer than the hour the workflow waits, run the workflow again later and it picks up the signed file. If Mozilla rejects a version, the workflow says so: fix the cause and release a new version. Anyone holding them can publish a version that installed copies will accept, so keep them only in those secrets. The workflow also needs the repository variable `NEETSRS_GITHUB_CLIENT_ID` (see below); without it the build would have no GitHub sync, so the workflow stops.
+
+## Sign-in server
+
+GitHub sync signs in through `backend/worker.ts`, a Cloudflare Worker at `https://neetsrs-auth.neetsrs.workers.dev` that holds the GitHub OAuth App's client secret and exchanges sign-in codes and refresh tokens for the extension. It stores nothing and never sees learning data.
+
+- The OAuth App's callback URL is Firefox's redirect URL for `neetsrs@ovltn.github.io`: `https://133f2c0640d73c08bbab7e146e8800ef9541f110.extensions.allizom.org/`. The same value is `ALLOWED_CALLBACKS` in `backend/wrangler.jsonc`.
+- The public client ID is `GITHUB_CLIENT_ID` in `backend/wrangler.jsonc`, the `NEETSRS_GITHUB_CLIENT_ID` repository variable, and `WXT_GITHUB_CLIENT_ID` in a local `.env`.
+- Set the secret with `npx wrangler secret put GITHUB_CLIENT_SECRET --config backend/wrangler.jsonc`, and deploy with `npm run backend:deploy` after `npx wrangler login`.
+- The Worker's address is `shared/github-auth-origin.ts`. Changing it needs a new release, and users grant GitHub access again.
 
 ## Problem data
 

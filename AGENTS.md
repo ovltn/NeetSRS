@@ -33,7 +33,7 @@ NeetSRS is a fork of LeetSRS for neetcode.io.
 - `scripts/build-catalog.mjs` generates `public/data/neetcode-catalog-v1.json` and trims the roadmaps. Do not edit them by hand.
 - `content/submission-observer.ts` and `content/editor-reset.ts` depend on NeetCode's private API and markup; check them against the live site when they stop working.
 - Firefox releases are self-hosted: `.github/workflows/release-firefox.yml` signs the build (unlisted), attaches it to a GitHub release and lists it in `updates.json` through `scripts/add-firefox-update.mjs`. A rerun after a signing timeout downloads the already-signed file through `scripts/fetch-signed-firefox.mjs` rather than uploading the version again; the same script tells a version awaiting review from one Mozilla rejected. The manifest's `update_url` points at that file on `main`, so do not move or rename it.
-- Gist sync is hidden unless `WXT_GITHUB_CLIENT_ID` is set, and its sign-in server address is a placeholder.
+- Gist sync is hidden unless `WXT_GITHUB_CLIENT_ID` is set (release builds get it from the `NEETSRS_GITHUB_CLIENT_ID` repository variable). It signs in through the Worker in `backend/`, whose address is `shared/github-auth-origin.ts`; see [README.md#sign-in-server](README.md#sign-in-server). Only the Firefox callback is allowed.
 
 ## Commands
 

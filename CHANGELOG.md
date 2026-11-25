@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0 (2026-11-25)
+
+### Features
+
+- GitHub Gist sync works in Firefox, signing in through NeetSRS's own OAuth App and Cloudflare Worker. The sync itself is unchanged from LeetSRS.
+
 ## 0.1.1 (2026-11-25)
 
 ### Features

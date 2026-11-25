@@ -21,6 +21,7 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       WEB_EXT_API_KEY: ${{ secrets.WEB_EXT_API_KEY }}
       WEB_EXT_API_SECRET: ${{ secrets.WEB_EXT_API_SECRET }}
+      WXT_GITHUB_CLIENT_ID: ${{ vars.NEETSRS_GITHUB_CLIENT_ID }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -43,6 +44,10 @@ jobs:
           fi
           if [ -z "$WEB_EXT_API_KEY" ] || [ -z "$WEB_EXT_API_SECRET" ]; then
             echo "::error::Set the WEB_EXT_API_KEY and WEB_EXT_API_SECRET repository secrets (from https://addons.mozilla.org/developers/addon/api/key/)."
+            exit 1
+          fi
+          if [ -z "$WXT_GITHUB_CLIENT_ID" ]; then
+            echo "::error::Set the NEETSRS_GITHUB_CLIENT_ID repository variable to the GitHub OAuth App's client ID; without it the release has no GitHub sync."
             exit 1
           fi
           echo "VERSION=$VERSION" >> "$GITHUB_ENV"
